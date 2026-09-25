@@ -195,6 +195,12 @@ app.get('/', (_req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+app.get('/assets/logo.webp', (_req, res) => {
+  res.sendFile(path.join(__dirname, 'assets', 'images', 'image-01.webp'), {
+    headers: { 'Cache-Control': 'public, max-age=604800, immutable' }
+  });
+});
+
 app.use('/assets', express.static(path.join(__dirname, 'assets'), {
   maxAge: '7d',
   immutable: true
