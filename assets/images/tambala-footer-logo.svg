@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 210" role="img" aria-labelledby="title desc">
+<title id="title">Tambala Technologies</title>
+<desc id="desc">Tambala Technologies logo with blue and cyan geometric mark</desc>
+<g transform="translate(184 10)">
+  <path d="M0 0h78v70L40 48 0 28z" fill="#2864e0"/>
+  <path d="M126 10h78l-22 62-48 27-18-58z" fill="#30b5ed"/>
+  <path d="M72 58l42-18v98l-42-35z" fill="#2864e0"/>
+  <path d="M114 78l40-25v73l-40 36z" fill="#30b5ed"/>
+  <rect x="86" y="49" width="43" height="43" transform="rotate(45 107.5 70.5)" fill="#fff"/>
+  <rect x="97" y="60" width="21" height="21" transform="rotate(45 107.5 70.5)" fill="#8bdcf5"/>
+</g>
+<text x="260" y="166" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="52" font-weight="700" letter-spacing="2" fill="#fff">TAMBALA</text>
+<text x="260" y="193" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" font-weight="400" letter-spacing="9" fill="#8bdcf5">TECHNOLOGIES</text>
+</svg>
