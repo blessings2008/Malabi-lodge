@@ -418,7 +418,57 @@ textarea{min-height:96px;resize:vertical;}
 body.lightbox-open{overflow:hidden;}
 @media(prefers-reduced-motion:reduce){.room-gallery img,.dining-visual img,.story-visual img{transition:none;}}
 
-.booking-status{margin-top:12px;font-size:.9rem;line-height:1.4}.booking-status.success{color:#2e7d5b}.booking-status.error{color:#b54747}@media (prefers-reduced-motion:reduce){.booking-status{transition:none}}\n</style>
+.booking-status{margin-top:12px;font-size:.9rem;line-height:1.4}.booking-status.success{color:#2e7d5b}.booking-status.error{color:#b54747}@media (prefers-reduced-motion:reduce){.booking-status{transition:none}}\n
+  /* Desktop refinement */
+  @media (min-width:1200px){
+    .wrap{max-width:1320px;padding-left:48px;padding-right:48px;}
+    .nav-inner{max-width:1320px;padding:22px 48px;}
+    .hero{min-height:88vh;}
+    .hero-content{max-width:1320px;padding:0 48px 84px;}
+    .hero h1{font-size:clamp(3.5rem,5vw,5.4rem);max-width:10ch;}
+    .hero-sub{font-size:1.05rem;max-width:48ch;}
+    .hero-actions{margin-top:2rem;}
+    .journey,.dining,.story,.gallery,.location{padding-top:110px;padding-bottom:110px;}
+    .journey-grid{grid-template-columns:minmax(300px,.72fr) minmax(620px,1.28fr);gap:5rem;}
+    .journey-icons{gap:1rem;}
+    .room-section{padding:104px 0;}
+    .room-section.compact{padding:76px 0;}
+    .room-head{display:grid;grid-template-columns:minmax(280px,.8fr) minmax(420px,1.2fr);align-items:end;gap:4rem;}
+    .room-head > div:last-child{justify-self:end;width:100%;max-width:620px;}
+    .room-gallery{grid-template-columns:repeat(4,1fr);gap:12px;}
+    .room-gallery:not(.featured) a:first-child{grid-column:span 2;}
+    .room-gallery:not(.featured) a:first-child img{aspect-ratio:16/9;}
+    .room-section.compact .room-gallery{grid-template-columns:repeat(4,1fr);gap:12px;}
+    .facilities{padding:110px 0;}
+    .fac-grid{grid-template-columns:minmax(280px,.65fr) minmax(650px,1.35fr);gap:5rem;}
+    .fac-list{gap:1rem 2rem;}
+    .dining-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6rem;}
+    .dining-visual{aspect-ratio:5/4;}
+    .menu-block{padding:86px 0 110px;}
+    .menu-cat-header{padding:1.35rem 0;}
+    .menu-cat-body{padding-right:2rem;}
+    .story-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6rem;}
+    .story-visual{aspect-ratio:16/10;}
+    .gallery-grid-inner{grid-template-columns:minmax(260px,.7fr) minmax(700px,1.3fr);gap:5rem;}
+    .gallery-mosaic{gap:10px;}
+    .booking{padding:120px 0;}
+    .booking-grid{grid-template-columns:minmax(360px,.8fr) minmax(560px,1.2fr);gap:6rem;align-items:center;}
+    .booking-form-card{padding:2.4rem;}
+    form{gap:1.2rem;}
+    .location{padding-bottom:120px;}
+    .loc-grid{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:5rem;align-items:center;}
+    .map-embed{aspect-ratio:16/11;min-height:520px;}
+    footer{padding:64px 0 28px;}
+  }
+  @media (min-width:1500px){
+    .wrap,.nav-inner,.hero-content{max-width:1440px;}
+    .hero h1{font-size:5.7rem;}
+    .hero-content{padding-bottom:96px;}
+    .room-gallery,.room-section.compact .room-gallery{gap:14px;}
+    .booking-grid{gap:7rem;}
+  }
+
+</style>
 </head>
 <body>
 
