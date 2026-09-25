@@ -196,7 +196,7 @@ app.get('/', (_req, res) => {
 });
 
 app.get('/assets/logo.webp', (_req, res) => {
-  res.sendFile(path.join(__dirname, 'assets', 'images', 'image-01.webp'), {
+  res.sendFile(path.join(__dirname, 'assets', 'images', 'malabi-office-logo.png'), {
     headers: { 'Cache-Control': 'public, max-age=604800, immutable' }
   });
 });
