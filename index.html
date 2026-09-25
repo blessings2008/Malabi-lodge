@@ -10,7 +10,10 @@
 <meta property="og:title" content="Malabi Exclusive Lodges — Stay Somewhere Personal">
 <meta property="og:description" content="An intimate lodge experience in Lilongwe, Malawi. Premium, Executive, Deluxe and Family rooms, with pool, garden and restaurant on-site.">
 <meta property="og:image" content="https://raw.githubusercontent.com/blessings2008/Malabi-lodge/main/assets/images/image-02.webp">
-<meta property="og:image:alt" content="Malabi Exclusive Lodges in Lilongwe, Malawi">\n<meta property="og:image:type" content="image/webp">\n<meta property="og:image:width" content="1200">\n<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Malabi Exclusive Lodges in Lilongwe, Malawi">
+<meta property="og:image:type" content="image/webp">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Malabi Exclusive Lodges — Stay Somewhere Personal">
 <meta name="twitter:description" content="An intimate lodge experience in Lilongwe, Malawi.">
@@ -418,7 +421,16 @@ textarea{min-height:96px;resize:vertical;}
 body.lightbox-open{overflow:hidden;}
 @media(prefers-reduced-motion:reduce){.room-gallery img,.dining-visual img,.story-visual img{transition:none;}}
 
-.booking-status{margin-top:12px;font-size:.9rem;line-height:1.4}.booking-status.success{color:#2e7d5b}.booking-status.error{color:#b54747}@media (prefers-reduced-motion:reduce){.booking-status{transition:none}}\n
+.booking-status{margin-top:12px;font-size:.9rem;line-height:1.4}.booking-status.success{color:#2e7d5b}.booking-status.error{color:#b54747}@media (prefers-reduced-motion:reduce){.booking-status{transition:none}}
+
+  /* Mid-width desktop/tablet safety: keep multi-column layouts from becoming cramped. */
+  @media (min-width:960px) and (max-width:1199px){
+    .journey-grid{grid-template-columns:1fr;gap:3rem;}
+    .journey-icons{grid-template-columns:repeat(5,minmax(0,1fr));gap:.7rem;}
+    .fac-grid,.dining-grid,.story-grid,.gallery-grid-inner,.booking-grid,.loc-grid{grid-template-columns:1fr;gap:3rem;}
+    .booking-grid{align-items:start;}
+  }
+
   /* Desktop refinement */
   @media (min-width:1200px){
     .wrap{max-width:1320px;padding-left:48px;padding-right:48px;}
