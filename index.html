@@ -250,6 +250,165 @@
 
   .reveal{opacity:0; transform:translateY(22px); transition:opacity 0.7s ease, transform 0.7s ease;}
   .reveal.in{opacity:1; transform:translateY(0);}
+
+/* ===== POLISH PASS: responsive layout, image presentation & mobile UX ===== */
+:root{
+  --content-max:1280px;
+  --radius-sm:10px;
+  --radius-md:16px;
+  --radius-lg:22px;
+}
+body{min-width:320px;}
+.wrap{max-width:var(--content-max);}
+section{scroll-margin-top:86px;}
+
+/* Header / navigation */
+header{will-change:background,backdrop-filter;}
+.nav-inner{min-height:76px;}
+.logo{min-width:0;}
+.logo > div{min-width:0;}
+.logo-text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.mobile-menu{padding:32px 24px calc(32px + env(safe-area-inset-bottom));}
+.mobile-menu a{padding:7px 12px;}
+@media(max-width:420px){
+  .nav-inner{padding-left:16px;padding-right:16px;}
+  .logo-mark{width:28px;}
+  .logo-text{font-size:1rem;}
+  .logo-sub{font-size:.46rem;}
+}
+
+/* Hero */
+.hero{min-height:max(620px,92svh);}
+.hero-bg img{will-change:transform;}
+.hero-content{padding-bottom:82px;}
+.hero-actions .btn{min-height:46px;}
+@media(max-width:600px){
+  .hero{min-height:calc(100svh - 8px);align-items:flex-end;}
+  .hero-bg::after{
+    background:linear-gradient(180deg,rgba(15,18,11,.48) 0%,rgba(15,18,11,.14) 28%,rgba(15,18,11,.48) 58%,rgba(15,18,11,.94) 100%);
+  }
+  .hero-content{padding:0 20px 94px;}
+  .hero h1{font-size:clamp(2.35rem,12vw,3.4rem);max-width:10ch;}
+  .hero-sub{font-size:.9rem;max-width:34ch;}
+  .hero-actions{display:grid;grid-template-columns:1fr;gap:.65rem;max-width:360px;}
+  .hero-actions .btn{justify-content:center;width:100%;}
+  .scroll-cue{display:none;}
+}
+
+/* Sections */
+.journey,.dining,.story,.gallery,.location{padding-top:clamp(64px,8vw,96px);padding-bottom:clamp(64px,8vw,96px);}
+.room-section{padding-top:clamp(58px,7vw,88px);padding-bottom:clamp(58px,7vw,88px);}
+.section-title{max-width:22ch;}
+.room-head{align-items:flex-start;}
+.room-head > div:first-child{min-width:0;}
+.room-head .room-price{white-space:nowrap;}
+@media(max-width:600px){
+  .wrap{padding-left:18px;padding-right:18px;}
+  .rooms-nav{padding-bottom:42px;}
+  .rooms-nav-inner{justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;padding:2px 2px 10px;scrollbar-width:none;}
+  .rooms-nav-inner::-webkit-scrollbar{display:none;}
+  .room-pill{flex:0 0 auto;padding:9px 16px;}
+  .room-head{gap:.9rem;margin-bottom:1.35rem;}
+  .room-head .room-price{width:100%;}
+}
+
+/* Room imagery: consistent cards, better focal hierarchy, less awkward stretching */
+.room-gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+.room-gallery a{display:block;overflow:hidden;border-radius:var(--radius-sm);background:var(--ivory-panel);}
+.room-gallery img{width:100%;height:100%;aspect-ratio:4/3;object-fit:cover;transition:transform .55s cubic-bezier(.2,.7,.2,1),filter .35s ease;}
+.room-gallery a:focus-visible img,.room-gallery a:hover img{transform:scale(1.045);filter:saturate(1.04);}
+.room-gallery.featured{grid-template-columns:repeat(2,minmax(0,1fr));}
+.room-gallery.featured a:first-child{grid-column:1/-1;grid-row:auto;}
+.room-gallery.featured a:first-child img{aspect-ratio:16/9;}
+.room-gallery.featured a:not(:first-child) img{aspect-ratio:4/3;}
+.room-section.compact .room-gallery{grid-template-columns:repeat(2,minmax(0,1fr));}
+@media(min-width:720px){
+  .room-gallery{grid-template-columns:repeat(3,minmax(0,1fr));}
+  .room-gallery.featured{grid-template-columns:repeat(4,minmax(0,1fr));}
+  .room-gallery.featured a:first-child{grid-column:span 2;grid-row:span 2;}
+  .room-gallery.featured a:first-child img{height:100%;aspect-ratio:auto;}
+  .room-section.compact .room-gallery{grid-template-columns:repeat(3,minmax(0,1fr));}
+}
+@media(min-width:1100px){
+  .room-gallery{gap:14px;}
+  .room-section.compact .room-gallery{grid-template-columns:repeat(4,minmax(0,1fr));}
+}
+
+/* Facilities / dining */
+.facilities{padding-top:clamp(64px,8vw,96px);padding-bottom:clamp(64px,8vw,96px);}
+.fac-list{gap:0 1.25rem;}
+@media(max-width:480px){.fac-list{grid-template-columns:1fr;}}
+.dining-visual,.story-visual,.map-embed{box-shadow:0 16px 45px rgba(40,51,31,.08);}
+.dining-visual img,.story-visual img{transition:transform .6s ease;}
+.dining-visual:hover img,.story-visual:hover img{transform:scale(1.02);}
+
+/* Menu: easier scanning on phones */
+.menu-block{padding-top:clamp(58px,7vw,82px);padding-bottom:clamp(64px,8vw,92px);}
+.menu-cat-header{gap:10px;}
+.menu-cat-header>span:first-child{min-width:0;}
+.price-note{text-align:right;}
+@media(max-width:600px){
+  .menu-head-row{align-items:flex-start;}
+  .serving-times{display:grid;grid-template-columns:1fr 1fr;gap:.5rem 1rem;width:100%;}
+  .menu-cat-header{font-size:1.05rem;padding:1rem 0;}
+  .menu-cat-header .price-note{font-size:.68rem;line-height:1.25;}
+  .menu-item{font-size:.84rem;align-items:flex-start;}
+  .menu-item-price{font-size:.82rem;}
+}
+
+/* Gallery mosaic */
+.gallery-mosaic{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+.gallery-mosaic .g1{grid-column:span 2;grid-row:span 1;aspect-ratio:16/9;}
+.gallery-mosaic .g-wide{grid-column:span 2;aspect-ratio:16/8;}
+.gallery-mosaic>div{aspect-ratio:1/1;}
+@media(min-width:900px){
+  .gallery-mosaic{grid-template-columns:repeat(3,minmax(0,1fr));}
+  .gallery-mosaic .g1{grid-column:span 2;grid-row:span 2;aspect-ratio:auto;}
+  .gallery-mosaic .g-wide{grid-column:span 2;aspect-ratio:21/9;}
+  .gallery-mosaic>div{aspect-ratio:4/3;}
+}
+
+/* Booking form */
+.booking{padding-top:clamp(72px,9vw,108px);padding-bottom:clamp(72px,9vw,108px);}
+.booking-form-card{box-shadow:0 24px 70px rgba(0,0,0,.18);}
+input,select,textarea{min-height:46px;-webkit-appearance:none;appearance:none;}
+textarea{min-height:96px;resize:vertical;}
+.submit-btn{min-height:48px;}
+@media(max-width:600px){
+  .booking-form-card{padding:1.15rem;border-radius:14px;}
+  form{gap:.8rem;}
+  .booking-contact{font-size:.84rem;}
+}
+
+/* Location */
+.map-embed{min-height:320px;}
+@media(max-width:600px){.map-embed{min-height:280px;}}
+.checkinout{flex-wrap:wrap;gap:1.2rem 2rem;}
+
+/* Sticky CTA: thumb-friendly + safe-area aware */
+.sticky-cta{
+  padding-bottom:max(10px,env(safe-area-inset-bottom));
+  padding-left:max(12px,env(safe-area-inset-left));
+  padding-right:max(12px,env(safe-area-inset-right));
+}
+.sticky-cta a{min-height:44px;display:flex;align-items:center;justify-content:center;}
+@media(min-width:768px){.sticky-cta{display:none;}}
+
+/* Accessibility / touch */
+@media(pointer:coarse){
+  .room-gallery a,.gallery-mosaic>div{cursor:pointer;}
+  .nav-links a,.room-pill,.btn,.wa-btn,.sticky-cta a{min-height:44px;}
+}
+
+/* Lightweight image lightbox */
+.malabi-lightbox{position:fixed;inset:0;z-index:1000;background:rgba(8,11,7,.94);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;visibility:hidden;transition:opacity .22s ease,visibility .22s ease;}
+.malabi-lightbox.open{opacity:1;visibility:visible;}
+.malabi-lightbox img{max-width:min(1200px,94vw);max-height:88vh;width:auto;height:auto;object-fit:contain;border-radius:8px;box-shadow:0 24px 80px rgba(0,0,0,.45);}
+.malabi-lightbox-close{position:absolute;top:max(16px,env(safe-area-inset-top));right:max(16px,env(safe-area-inset-right));width:46px;height:46px;border:1px solid rgba(255,255,255,.25);border-radius:50%;background:rgba(0,0,0,.25);color:#fff;font-size:25px;cursor:pointer;}
+.malabi-lightbox-caption{position:absolute;left:24px;right:24px;bottom:max(18px,env(safe-area-inset-bottom));text-align:center;color:rgba(255,255,255,.78);font-size:.78rem;}
+body.lightbox-open{overflow:hidden;}
+@media(prefers-reduced-motion:reduce){.room-gallery img,.dining-visual img,.story-visual img{transition:none;}}
+
 </style>
 </head>
 <body>
@@ -800,6 +959,77 @@
     entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
   }, {threshold:0.1});
   revealEls.forEach(el => io.observe(el));
+  /* Enhanced mobile UX + accessible image lightbox */
+  (() => {
+    const lightbox = document.createElement('div');
+    lightbox.className = 'malabi-lightbox';
+    lightbox.setAttribute('role','dialog');
+    lightbox.setAttribute('aria-modal','true');
+    lightbox.setAttribute('aria-label','Image preview');
+    lightbox.innerHTML = '<button class="malabi-lightbox-close" type="button" aria-label="Close image">×</button><img alt=""><div class="malabi-lightbox-caption"></div>';
+    document.body.appendChild(lightbox);
+
+    const lbImg = lightbox.querySelector('img');
+    const lbCaption = lightbox.querySelector('.malabi-lightbox-caption');
+    const lbClose = lightbox.querySelector('.malabi-lightbox-close');
+    let lastFocused = null;
+
+    const closeLightbox = () => {
+      lightbox.classList.remove('open');
+      document.body.classList.remove('lightbox-open');
+      lbImg.removeAttribute('src');
+      if(lastFocused) lastFocused.focus();
+    };
+    const openLightbox = (img, trigger) => {
+      lastFocused = trigger || document.activeElement;
+      lbImg.src = img.currentSrc || img.src;
+      lbImg.alt = img.alt || '';
+      lbCaption.textContent = img.alt || '';
+      lightbox.classList.add('open');
+      document.body.classList.add('lightbox-open');
+      lbClose.focus();
+    };
+
+    document.querySelectorAll('.room-gallery a, .gallery-mosaic img').forEach(el => {
+      const img = el.tagName === 'IMG' ? el : el.querySelector('img');
+      if(!img) return;
+      const trigger = el.tagName === 'A' ? el : img;
+      trigger.addEventListener('click', e => {
+        e.preventDefault();
+        openLightbox(img, trigger);
+      });
+      if(el.tagName === 'IMG') {
+        el.setAttribute('tabindex','0');
+        el.setAttribute('role','button');
+        el.addEventListener('keydown', e => {
+          if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLightbox(img, el); }
+        });
+      }
+    });
+
+    lbClose.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', e => { if(e.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', e => {
+      if(e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
+    });
+
+    /* Prevent impossible date selections in the enquiry form. */
+    const checkin = document.getElementById('checkin');
+    const checkout = document.getElementById('checkout');
+    const today = new Date();
+    const iso = new Date(today.getTime() - today.getTimezoneOffset()*60000).toISOString().slice(0,10);
+    if(checkin){
+      checkin.min = iso;
+      checkin.addEventListener('change', () => {
+        if(checkout){
+          checkout.min = checkin.value || iso;
+          if(checkout.value && checkin.value && checkout.value < checkin.value) checkout.value = '';
+        }
+      });
+    }
+    if(checkout) checkout.min = iso;
+  })();
+
 </script>
 
 </body>
