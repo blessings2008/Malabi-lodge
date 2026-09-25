@@ -409,7 +409,7 @@ textarea{min-height:96px;resize:vertical;}
 body.lightbox-open{overflow:hidden;}
 @media(prefers-reduced-motion:reduce){.room-gallery img,.dining-visual img,.story-visual img{transition:none;}}
 
-</style>
+.booking-status{margin-top:12px;font-size:.9rem;line-height:1.4}.booking-status.success{color:#2e7d5b}.booking-status.error{color:#b54747}@media (prefers-reduced-motion:reduce){.booking-status{transition:none}}\n</style>
 </head>
 <body>
 
@@ -830,7 +830,11 @@ body.lightbox-open{overflow:hidden;}
               b) a fetch() call to a custom API route that emails/stores the enquiry.
             All fields already carry name attributes for either approach.
           -->
-          <form id="bookingForm">
+          <form id="bookingForm" novalidate>
+            <div class="field" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;">
+              <label for="website">Website</label>
+              <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+            </div>
             <div class="field"><label for="name">Full Name</label><input id="name" name="name" type="text" required></div>
             <div class="field"><label for="email">Email Address</label><input id="email" name="email" type="email"></div>
             <div class="field"><label for="phone">Phone / WhatsApp</label><input id="phone" name="phone" type="tel"></div>
@@ -944,13 +948,49 @@ body.lightbox-open{overflow:hidden;}
   // backend endpoint exists. For now it just confirms receipt locally.
   const bookingForm = document.getElementById('bookingForm');
   if (bookingForm) {
-    bookingForm.addEventListener('submit', (e) => {
+    const submitBtn = bookingForm.querySelector('.submit-btn');
+    let status = document.getElementById('bookingStatus');
+    if (!status) {
+      status = document.createElement('div');
+      status.id = 'bookingStatus';
+      status.className = 'booking-status';
+      status.setAttribute('role', 'status');
+      status.setAttribute('aria-live', 'polite');
+      submitBtn?.parentElement?.appendChild(status);
+    }
+
+    bookingForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const btn = bookingForm.querySelector('.submit-btn');
-      const original = btn.textContent;
-      btn.textContent = 'Thank you — we\'ll be in touch shortly';
-      btn.disabled = true;
-      setTimeout(() => { btn.textContent = original; btn.disabled = false; bookingForm.reset(); }, 3500);
+      if (!submitBtn) return;
+
+      const original = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending…';
+      status.textContent = '';
+      status.className = 'booking-status';
+
+      try {
+        const response = await fetch('/api/enquiry', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(Object.fromEntries(new FormData(bookingForm)))
+        });
+
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok || !result.ok) {
+          throw new Error(result.message || 'We could not send your enquiry.');
+        }
+
+        status.textContent = result.message || 'Your enquiry has been sent. We will be in touch shortly.';
+        status.classList.add('success');
+        bookingForm.reset();
+      } catch (error) {
+        status.textContent = error.message || 'Something went wrong. Please try again or contact Malabi directly.';
+        status.classList.add('error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = original;
+      }
     });
   }
 
