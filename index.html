@@ -239,8 +239,8 @@
   .footer-social a{width:34px; height:34px; border-radius:50%; border:1px solid rgba(247,243,234,0.2); display:flex; align-items:center; justify-content:center; font-size:0.72rem; color:rgba(247,243,234,0.7);}
   .footer-social a:hover{border-color:var(--gold); color:var(--gold);}
   .footer-bottom{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:1rem; padding-top:1.6rem; border-top:1px solid rgba(247,243,234,0.12); font-size:0.75rem; color:rgba(247,243,234,0.45);}
-  .footer-credit{display:flex; align-items:center; gap:8px;}
-  .footer-credit .tt-mark{width:16px;height:16px;border-radius:3px;background:linear-gradient(135deg, var(--gold), var(--green));display:inline-block;}
+  .footer-credit{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+  .footer-credit .tt-mark{display:none;} .footer-credit-label{opacity:.58;} .footer-tambala-logo{width:92px;height:auto;display:block;opacity:.48;transition:opacity .2s ease;} .footer-tambala-logo:hover{opacity:.7;}
 
   .sticky-cta{position:fixed; bottom:0; left:0; right:0; z-index:95; background:rgba(20,24,15,0.96); backdrop-filter:blur(10px); padding:12px 16px calc(12px + env(safe-area-inset-bottom)); display:flex; gap:10px;}
   @media(min-width:768px){.sticky-cta{display:none;}}
@@ -904,7 +904,7 @@ body.lightbox-open{overflow:hidden;}
     </div>
     <div class="footer-bottom">
       <span>© 2026 Malabi Exclusive Lodges. All rights reserved.</span>
-      <span class="footer-credit"><span class="tt-mark"></span>Designed &amp; Developed by Tambala Technologies</span>
+      <span class="footer-credit"><span class="footer-credit-label">Designed &amp; Developed by</span><img class="footer-tambala-logo" src="/assets/images/tambala-footer-logo.svg" alt="Tambala Technologies" loading="lazy" decoding="async"></span>
     </div>
   </div>
 </footer>
