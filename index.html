@@ -28,20 +28,13 @@
   @media(min-width:1600px){.wrap{max-width:1400px;}}
   a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible{outline:2px solid var(--gold); outline-offset:3px;}
 
-  header{position:fixed; top:0; left:0; right:0; z-index:100; display:block; visibility:visible; opacity:1; transition:background 0.3s ease; padding-top:env(safe-area-inset-top,0px); background:linear-gradient(to bottom,rgba(8,10,8,.78),rgba(8,10,8,.08),transparent);}
+  header{position:fixed; top:0; left:0; right:0; z-index:100; transition:background 0.3s ease; padding-top:env(safe-area-inset-top,0px);}
   .nav-inner{display:flex; align-items:center; justify-content:space-between; padding:20px 24px; max-width:1240px; margin:0 auto;}
   @media(min-width:768px){.nav-inner{padding:24px 56px;}}
-  .logo{display:flex; align-items:center; gap:17px; min-width:0; text-decoration:none;}
-  .logo-mark{display:block; width:60px; height:16px; background:#fff; flex:0 0 auto;}
-  .logo-copy{display:flex; flex-direction:column; justify-content:center; min-width:0;}
-  .logo-text{display:block; font-family:var(--font-display); font-size:1.55rem; font-weight:500; letter-spacing:0.15em; color:#fff; line-height:.95; text-transform:uppercase; white-space:nowrap;}
-  .logo-sub{display:block; font-family:var(--font-body); font-size:.58rem; font-weight:400; letter-spacing:.13em; color:rgba(255,255,255,.72); text-transform:uppercase; margin-top:6px; white-space:nowrap;}
-  @media(max-width:600px){
-    .logo{gap:16px;}
-    .logo-mark{width:60px; height:16px;}
-    .logo-text{font-size:1.48rem; letter-spacing:.14em;}
-    .logo-sub{font-size:.54rem; margin-top:5px;}
-  }
+  .logo{display:flex; align-items:center; gap:8px;}
+  .logo-mark{width:32px; height:auto; filter:brightness(0) invert(1);}
+  .logo-text{font-family:var(--font-display); font-size:1.15rem; letter-spacing:0.12em; color:#fff; line-height:1.1; text-transform:uppercase;}
+  .logo-sub{font-size:0.52rem; letter-spacing:0.1em; color:rgba(255,255,255,0.65); text-transform:uppercase; margin-top:1px;}
   .nav-links{display:none; gap:1.7rem; font-size:0.8rem; font-weight:500;}
   @media(min-width:1040px){.nav-links{display:flex;}}
   .nav-links a{color:rgba(255,255,255,0.85); transition:color 0.2s ease;}
@@ -424,8 +417,8 @@ body.lightbox-open{overflow:hidden;}
 <header id="site-header">
   <div class="nav-inner">
     <a href="#top" class="logo">
-      <span class="logo-mark" aria-hidden="true"></span>
-      <div class="logo-copy"><div class="logo-text">Malabi</div><div class="logo-sub">Exclusive Lodges</div></div>
+      <img class="logo-mark" src="assets/images/image-01.webp" alt="Malabi Exclusive Lodge logo" loading="eager" decoding="async">
+      <div><div class="logo-text">Malabi</div><div class="logo-sub">Exclusive Lodges</div></div>
     </a>
     <nav class="nav-links">
       <a href="#top">Home</a>
