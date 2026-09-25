@@ -480,6 +480,36 @@ body.lightbox-open{overflow:hidden;}
     .booking-grid{gap:7rem;}
   }
 
+
+  /* Booking form polish */
+  .booking-form-card{box-shadow:0 18px 50px rgba(10,16,9,.18);border:1px solid rgba(247,243,234,.5);}
+  .booking-form-card form{align-items:start;}
+  .field input,.field select,.field textarea{width:100%;min-height:46px;transition:border-color .2s ease,box-shadow .2s ease,background .2s ease;}
+  .field textarea{min-height:104px;resize:vertical;}
+  .field input::placeholder,.field textarea::placeholder{color:#8b877b;}
+  .field input:hover,.field select:hover,.field textarea:hover{border-color:rgba(185,155,92,.45);}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(185,155,92,.12);}
+  .submit-btn{min-height:48px;display:inline-flex;align-items:center;justify-content:center;gap:8px;}
+  .submit-btn:disabled{opacity:.72;cursor:wait;}
+  .booking-status{margin-top:.8rem;padding:.75rem .9rem;border-radius:6px;font-size:.78rem;line-height:1.45;background:rgba(40,51,31,.06);color:var(--green-deep);min-height:0;}
+  .booking-status:empty{display:none;}
+  .booking-status.success{background:rgba(63,125,78,.1);color:#315f3a;border:1px solid rgba(63,125,78,.18);}
+  .booking-status.error{background:rgba(181,71,71,.08);color:#8b3636;border:1px solid rgba(181,71,71,.16);}
+  .booking-form-note{margin:-.25rem 0 .2rem;font-size:.76rem;color:var(--text-dim);grid-column:1/-1;}
+  @media(min-width:900px){
+    .booking-form-card{padding:2.1rem;}
+    .booking-form-note{font-size:.78rem;}
+  }
+  @media(max-width:899px) and (min-width:521px){
+    .booking-form-card{padding:1.5rem;}
+  }
+  @media(max-width:520px){
+    .booking-form-card{padding:1.25rem;border-radius:10px;}
+    .booking-form-note{grid-column:auto;margin:0;}
+    .field input,.field select,.field textarea{font-size:16px;}
+    .submit-btn{min-height:50px;}
+  }
+
 </style>
 </head>
 <body>
@@ -902,6 +932,7 @@ body.lightbox-open{overflow:hidden;}
             All fields already carry name attributes for either approach.
           -->
           <form id="bookingForm" novalidate>
+            <p class="booking-form-note">Send us your dates and preferences. We’ll confirm availability with you directly.</p>
             <div class="field" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;">
               <label for="website">Website</label>
               <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
@@ -1054,9 +1085,11 @@ body.lightbox-open{overflow:hidden;}
         status.textContent = result.message || 'Your enquiry has been sent. We will be in touch shortly.';
         status.classList.add('success');
         bookingForm.reset();
+        status.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       } catch (error) {
         status.textContent = error.message || 'Something went wrong. Please try again or contact Malabi directly.';
         status.classList.add('error');
+        status.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = original;
