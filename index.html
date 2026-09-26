@@ -91,6 +91,10 @@
   .mobile-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
   .mobile-menu{position:fixed; inset:0; background:var(--green-deep); z-index:200; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.6rem; opacity:0; visibility:hidden; transition:opacity 0.3s ease;}
   .mobile-menu.open{opacity:1; visibility:visible;}
+  .mobile-menu-close{position:absolute; top:24px; right:24px; width:44px; height:44px; display:flex; align-items:center; justify-content:center; border:1px solid rgba(255,255,255,0.22); border-radius:50%; background:rgba(255,255,255,0.06); color:#fff; font-family:var(--font-body); font-size:1.7rem; line-height:1; cursor:pointer; transition:all 0.2s ease;}
+  .mobile-menu-close:hover{border-color:var(--gold); color:var(--gold); background:rgba(185,155,92,0.1);}
+  @media(min-width:768px){.mobile-menu-close{top:32px; right:56px;}}
+
   .mobile-menu a{font-family:var(--font-display); font-size:1.5rem; color:#fff;}
   .mobile-menu a:hover{color:var(--gold);}
   .mobile-menu .mm-cta{margin-top:1rem; background:var(--green-pill); color:#fff; font-family:var(--font-body); font-size:0.88rem; font-weight:600; padding:14px 32px; border-radius:24px;}
@@ -563,6 +567,7 @@ body.lightbox-open{overflow:hidden;}
 </header>
 
 <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-menu-close" id="mobileMenuClose" type="button" aria-label="Close navigation menu">×</button>
   <a href="#rooms">Rooms</a>
   <a href="#facilities">Facilities</a>
   <a href="#menu-full">Menu</a>
@@ -1049,15 +1054,20 @@ body.lightbox-open{overflow:hidden;}
 <script>
   const toggle = document.getElementById('mobileToggle');
   const menu = document.getElementById('mobileMenu');
+  const menuClose = document.getElementById('mobileMenuClose');
+  const closeMobileMenu = () => {
+    menu.classList.remove('open');
+    toggle.classList.remove('open');
+    toggle.setAttribute('aria-expanded', false);
+  };
   toggle.addEventListener('click', () => {
     const open = menu.classList.toggle('open');
     toggle.classList.toggle('open');
     toggle.setAttribute('aria-expanded', open);
+    if(open) menuClose?.focus();
   });
-  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-    menu.classList.remove('open'); toggle.classList.remove('open');
-    toggle.setAttribute('aria-expanded', false);
-  }));
+  menuClose?.addEventListener('click', closeMobileMenu);
+  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMobileMenu));
 
   const header = document.getElementById('site-header');
   const setHeader = () => {
