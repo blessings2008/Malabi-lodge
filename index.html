@@ -22,34 +22,72 @@
 <meta name="twitter:image" content="https://raw.githubusercontent.com/blessings2008/Malabi-lodge/main/assets/images/image-02.webp?v=3">
 <script type="application/ld+json">
 {
-  "@context":"https://schema.org",
-  "@type":["Hotel","LodgingBusiness"],
-  "@id":"#malabi-exclusive-lodges",
-  "name":"Malabi Exclusive Lodges",
-  "description":"Lodge accommodation in Area 43, Lilongwe, Malawi, with Premium, Executive, Deluxe and Family rooms, plus a pool, garden and restaurant on-site.",
-  "image":"https://raw.githubusercontent.com/blessings2008/Malabi-lodge/main/assets/images/image-02.webp?v=3",
-  "telephone":["+265999914350","+265999912306","+265885284890"],
-  "email":"malabiexclusivelodges@gmail.com",
-  "address":{
-    "@type":"PostalAddress",
-    "streetAddress":"Area 43/528, Alimaunde",
-    "addressLocality":"Lilongwe",
-    "addressCountry":"MW"
-  },
-  "hasMap":"https://maps.app.goo.gl/8G4xfeaQpSxPD5fu9",
-  "sameAs":[
-    "https://www.facebook.com/Malabiexclusivelodge.mw",
-    "https://www.instagram.com/malabiexclusivelodge/",
-    "https://www.tiktok.com/@malabiexclusivelodge"
-  ],
-  "checkinTime":"12:00",
-  "checkoutTime":"10:00",
-  "amenityFeature":[
-    {"@type":"LocationFeatureSpecification","name":"Outdoor swimming pool","value":true},
-    {"@type":"LocationFeatureSpecification","name":"Wi-Fi","value":true},
-    {"@type":"LocationFeatureSpecification","name":"Free private parking","value":true},
-    {"@type":"LocationFeatureSpecification","name":"Air-conditioned rooms","value":true},
-    {"@type":"LocationFeatureSpecification","name":"Restaurant and room service","value":true}
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": [
+        "Hotel",
+        "LodgingBusiness"
+      ],
+      "@id": "#malabi-exclusive-lodges",
+      "name": "Malabi Exclusive Lodges",
+      "description": "Lodge accommodation in Area 43, Lilongwe, Malawi, with Premium, Executive, Deluxe and Family rooms, plus a pool, garden and restaurant on-site.",
+      "image": "https://raw.githubusercontent.com/blessings2008/Malabi-lodge/main/assets/images/image-02.webp?v=3",
+      "telephone": [
+        "+265999914350",
+        "+265999912306",
+        "+265885284890"
+      ],
+      "email": "malabiexclusivelodges@gmail.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Area 43/528, Alimaunde",
+        "addressLocality": "Lilongwe",
+        "addressCountry": "MW"
+      },
+      "hasMap": "https://maps.app.goo.gl/8G4xfeaQpSxPD5fu9",
+      "sameAs": [
+        "https://www.facebook.com/Malabiexclusivelodge.mw",
+        "https://www.instagram.com/malabiexclusivelodge/",
+        "https://www.tiktok.com/@malabiexclusivelodge"
+      ],
+      "checkinTime": "12:00",
+      "checkoutTime": "10:00",
+      "amenityFeature": [
+        {
+          "@type": "LocationFeatureSpecification",
+          "name": "Outdoor swimming pool",
+          "value": true
+        },
+        {
+          "@type": "LocationFeatureSpecification",
+          "name": "Wi-Fi",
+          "value": true
+        },
+        {
+          "@type": "LocationFeatureSpecification",
+          "name": "Free private parking",
+          "value": true
+        },
+        {
+          "@type": "LocationFeatureSpecification",
+          "name": "Air-conditioned rooms",
+          "value": true
+        },
+        {
+          "@type": "LocationFeatureSpecification",
+          "name": "Restaurant and room service",
+          "value": true
+        }
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "#website",
+      "name": "Malabi Exclusive Lodges",
+      "description": "Official website for Malabi Exclusive Lodges in Lilongwe, Malawi.",
+      "inLanguage": "en"
+    }
   ]
 }
 </script>
