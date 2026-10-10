@@ -195,6 +195,38 @@
   .deluxe-gallery img{height:100%; min-height:190px;}
   @media(min-width:960px){.deluxe-gallery{grid-template-columns:repeat(4,minmax(0,1fr));}}
   .room-gallery a:hover img{transform:scale(1.03);}
+  /* Cinematic room-tour card */
+  .room-film{margin-top:30px;display:grid;grid-template-columns:minmax(0,1.65fr) minmax(210px,.65fr);background:var(--green-deep);border-radius:10px;overflow:hidden;color:#fff;box-shadow:0 18px 50px rgba(23,39,27,.12);}
+  .room-film-image{position:relative;isolation:isolate;min-height:340px;overflow:hidden;background:#1d2b21;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(22px,4vw,46px);color:#fff;}
+  .room-film-image>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform .7s ease;filter:saturate(.88);}
+  .room-film-image:hover>img{transform:scale(1.045);}
+  .room-film-shade{position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(9,18,12,.76),rgba(9,18,12,.24) 70%),linear-gradient(0deg,rgba(8,15,10,.65),transparent 58%);}
+  .room-film-kicker{font-size:.68rem;letter-spacing:.2em;font-weight:700;color:#e3c98e;margin-bottom:15px;}
+  .room-film-title{font-family:var(--font-heading,Georgia,serif);font-size:clamp(2.15rem,4.4vw,4rem);line-height:1.04;max-width:520px;text-shadow:0 3px 20px #0005;}
+  .room-film-title em{font-weight:400;color:#e3c98e;}
+  .room-film-bottom{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:28px;font-size:.64rem;letter-spacing:.11em;color:rgba(255,255,255,.78);}
+  .room-film-open{font-size:.76rem;letter-spacing:0;color:#f1ddb0;border-bottom:1px solid #d8bd7e;padding-bottom:4px;white-space:nowrap;}
+  .room-film-play{position:absolute;top:28px;right:30px;width:60px;height:60px;border:1px solid rgba(255,255,255,.7);border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.13);backdrop-filter:blur(8px);transition:transform .25s,background .25s;}
+  .room-film-play span{font-size:17px;margin-left:3px;}
+  .room-film-image:hover .room-film-play{transform:scale(1.08);background:rgba(255,255,255,.24);}
+  .room-film-trigger{position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent;cursor:pointer;}
+  .room-film-note{padding:clamp(24px,3vw,38px);display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:17px;}
+  .room-film-note-mark{font-size:1.4rem;color:#d9bc7d;}
+  .room-film-note p{font-family:var(--font-heading,Georgia,serif);font-size:clamp(1.35rem,2vw,1.85rem);line-height:1.35;color:#fff;margin:0;}
+  .room-film-note-label{font-size:.62rem;letter-spacing:.15em;color:#d9bc7d;margin-top:8px;}
+  body.malabi-video-open{overflow:hidden;}
+  .malabi-video-modal{position:fixed;inset:0;z-index:1200;display:grid;grid-template-rows:auto 1fr auto;gap:12px;padding:max(18px,env(safe-area-inset-top)) max(18px,env(safe-area-inset-right)) max(18px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left));background:rgba(8,13,9,.97);color:#fff;opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s ease;}
+  .malabi-video-modal.open{opacity:1;visibility:visible;}
+  .malabi-video-top,.malabi-video-bottom{display:flex;align-items:center;justify-content:space-between;gap:16px;}
+  .malabi-video-brand{font-size:.68rem;letter-spacing:.17em;color:#e0c78d;text-transform:uppercase;}
+  .malabi-video-subtitle{font-family:var(--font-heading,Georgia,serif);font-size:1.05rem;margin-top:5px;color:rgba(255,255,255,.8);}
+  .malabi-video-close{width:46px;height:46px;flex:0 0 46px;border:1px solid rgba(255,255,255,.3);border-radius:50%;background:transparent;color:#fff;font-size:27px;cursor:pointer;}
+  .malabi-video-stage{min-height:0;display:flex;align-items:center;justify-content:center;}
+  .malabi-video-stage video{display:block;width:min(1120px,100%);max-height:calc(100vh - 180px);background:#000;aspect-ratio:16/9;object-fit:contain;border-radius:5px;box-shadow:0 22px 80px #0008;}
+  .malabi-video-bottom{font-size:.72rem;color:rgba(255,255,255,.64);letter-spacing:.05em;}
+  .malabi-video-bottom a{color:#e0c78d;text-decoration:none;border-bottom:1px solid #9e8756;padding-bottom:4px;white-space:nowrap;}
+  @media(max-width:700px){.room-film{grid-template-columns:1fr;}.room-film-image{min-height:330px;padding:24px;}.room-film-play{top:20px;right:20px;width:52px;height:52px;}.room-film-bottom{align-items:flex-end;font-size:.56rem;letter-spacing:.07em;}.room-film-note{padding:23px 25px;gap:10px;}.room-film-note p{font-size:1.4rem;}.malabi-video-modal{gap:10px;padding-left:12px;padding-right:12px;}.malabi-video-stage video{max-height:calc(100vh - 185px);aspect-ratio:4/3;}.malabi-video-bottom{font-size:.65rem;line-height:1.5;}.malabi-video-brand{font-size:.59rem;letter-spacing:.1em;}}
+  @media(prefers-reduced-motion:reduce){.room-film-image>img,.room-film-play,.malabi-video-modal{transition:none;}}
   .room-cta{margin-top:1.6rem;}
   .room-meta{display:flex; align-items:center; gap:8px; margin-top:0.6rem; flex-wrap:wrap;}
   .room-meta .badge{background:rgba(185,155,92,0.16); color:#8a6d34; padding:3px 11px; border-radius:12px; font-weight:600; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.04em;}
@@ -720,6 +752,18 @@ body.lightbox-open{overflow:hidden;}
         <a href="assets/images/image-08.webp" target="_blank"><img src="assets/images/image-08.webp" alt="Executive room four-poster bed" loading="lazy" decoding="async"></a>
         <a href="assets/images/image-09.webp" target="_blank"><img src="assets/images/image-09.webp" alt="Executive room seating and desk area" loading="lazy" decoding="async"></a>
         <a href="assets/images/image-10.webp" target="_blank"><img src="assets/images/image-10.webp" alt="Executive room en-suite bathroom" loading="lazy" decoding="async"></a>
+      </div>
+      <div class="room-film reveal">
+        <div class="room-film-image" role="img" aria-label="Preview of the Executive room">
+          <img src="assets/images/image-08.webp" alt="" loading="lazy" decoding="async">
+          <div class="room-film-shade"></div>
+          <div class="room-film-play" aria-hidden="true"><span>▶</span></div>
+          <div class="room-film-kicker">TAKE A CLOSER LOOK</div>
+          <div class="room-film-title">Step inside the<br><em>Executive Room</em></div>
+          <div class="room-film-bottom"><span>ROOM TOUR · MALABI EXCLUSIVE LODGES</span><span class="room-film-open">Watch the tour ↗</span></div>
+          <button class="room-film-trigger" type="button" data-open-malabi-video aria-label="Watch the Executive room video tour"></button>
+        </div>
+        <div class="room-film-note"><span class="room-film-note-mark">✦</span><p>A better feel for your stay, before you arrive.</p><span class="room-film-note-label">EXECUTIVE · LILONGWE</span></div>
       </div>
     </div>
   </section>
@@ -1283,5 +1327,53 @@ body.lightbox-open{overflow:hidden;}
 
 </script>
 
+
+<script>
+/* Accessible cinematic room-tour viewer */
+(() => {
+  const trigger = document.querySelector('[data-open-malabi-video]');
+  if (!trigger) return;
+  const modal = document.createElement('div');
+  modal.className = 'malabi-video-modal';
+  modal.id = 'malabi-video-modal';
+  modal.setAttribute('role','dialog');
+  modal.setAttribute('aria-modal','true');
+  modal.setAttribute('aria-label','Executive room video tour');
+  modal.innerHTML = '<div class="malabi-video-top"><div><div class="malabi-video-brand">Malabi Exclusive Lodges</div><div class="malabi-video-subtitle">Step inside the Executive Room</div></div><button class="malabi-video-close" type="button" aria-label="Close video">×</button></div><div class="malabi-video-stage"><video controls playsinline preload="metadata" poster="assets/images/image-08.webp" aria-label="Executive room tour"><source src="assets/images/VID-20261010-WA0005.mp4" type="video/mp4">Your browser does not support HTML video.</video></div><div class="malabi-video-bottom"><span>YOUR STAY, A LITTLE CLOSER.</span><a href="#booking" class="malabi-video-book">Ask about this room ↗</a></div>';
+  document.body.appendChild(modal);
+  const video = modal.querySelector('video');
+  const close = modal.querySelector('.malabi-video-close');
+  let lastFocus = null;
+  const open = () => {
+    lastFocus = document.activeElement;
+    modal.classList.add('open');
+    document.body.classList.add('malabi-video-open');
+    close.focus();
+    const playPromise = video.play();
+    if (playPromise && typeof playPromise.catch === 'function') playPromise.catch(() => {});
+  };
+  const shut = () => {
+    modal.classList.remove('open');
+    document.body.classList.remove('malabi-video-open');
+    video.pause();
+    video.currentTime = 0;
+    if (lastFocus) lastFocus.focus();
+  };
+  trigger.addEventListener('click', open);
+  close.addEventListener('click', shut);
+  modal.addEventListener('click', event => { if (event.target === modal) shut(); });
+  modal.querySelector('.malabi-video-book').addEventListener('click', shut);
+  document.addEventListener('keydown', event => {
+    if (!modal.classList.contains('open')) return;
+    if (event.key === 'Escape') shut();
+    if (event.key === 'Tab') {
+      const focusable = [close, modal.querySelector('video'), modal.querySelector('.malabi-video-book')];
+      const first = focusable[0], last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    }
+  });
+})();
+</script>
 </body>
 </html>
