@@ -217,10 +217,10 @@
   /* Inline room video: scroll naturally with the page */
   .room-film-inline{grid-template-columns:minmax(0,1.65fr) minmax(210px,.65fr);}
   .room-film-player{min-width:0;background:#080d09;display:flex;flex-direction:column;justify-content:center;}
-  .room-film-player video{display:block;width:100%;height:auto;max-height:none;aspect-ratio:auto;object-fit:contain;background:#080d09;}
+  .room-film-player video{display:block;width:100%;height:auto;max-height:none;aspect-ratio:4/3;object-fit:contain;background:#080d09;}
   .room-film-player-caption{display:flex;justify-content:space-between;gap:12px;padding:13px 18px;font-size:.61rem;letter-spacing:.12em;color:rgba(255,255,255,.68);}
   .room-film-book{display:inline-flex;margin-top:5px;color:#e3c98e;font-size:.8rem;border-bottom:1px solid #9e8756;padding-bottom:4px;}
-  @media(max-width:700px){.room-film-inline{grid-template-columns:1fr;}.room-film-player video{width:100%;height:auto;aspect-ratio:auto;}.room-film-player-caption{font-size:.52rem;padding:11px 13px;letter-spacing:.07em;}.room-film-note{padding:23px 25px;gap:10px;}}
+  @media(max-width:700px){.room-film-inline{grid-template-columns:1fr;}.room-film-player video{width:100%;height:auto;aspect-ratio:4/3;}.room-film-player-caption{font-size:.52rem;padding:11px 13px;letter-spacing:.07em;}.room-film-note{padding:23px 25px;gap:10px;}}
   .room-cta{margin-top:1.6rem;}
   .room-meta{display:flex; align-items:center; gap:8px; margin-top:0.6rem; flex-wrap:wrap;}
   .room-meta .badge{background:rgba(185,155,92,0.16); color:#8a6d34; padding:3px 11px; border-radius:12px; font-weight:600; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.04em;}
@@ -749,7 +749,7 @@ body.lightbox-open{overflow:hidden;}
       </div>
       <div class="room-film reveal room-film-inline">
         <div class="room-film-player">
-          <video controls autoplay muted loop playsinline webkit-playsinline preload="auto" poster="/assets/images/image-08.webp" aria-label="Executive room video tour">
+          <video controls playsinline webkit-playsinline preload="metadata" poster="/assets/images/image-08.webp" aria-label="Executive room video tour">
             <source src="/assets/images/VID-20261010-WA0005.mp4" type="video/mp4">
             Your browser does not support HTML video.
           </video>
