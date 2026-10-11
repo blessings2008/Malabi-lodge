@@ -1327,41 +1327,55 @@ body.lightbox-open{overflow:hidden;}
 </script>
 
 
-  // Pause the room video when it leaves the viewport; resume when it returns.
+  // Pause the room video offscreen and resume it when it comes back into view.
   (() => {
     const roomVideo = document.querySelector('.room-film-player video');
     if (!roomVideo || !('IntersectionObserver' in window)) return;
 
-    let resumeOnReturn = true;
+    let shouldResume = !roomVideo.paused;
+    let userPaused = false;
+    let pausingOffscreen = false;
+    let videoIsInView = false;
+
     const visibilityObserver = new IntersectionObserver((entries) => {
       for (const entry of entries) {
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.25) {
-          if (resumeOnReturn) {
-            const playAttempt = roomVideo.play();
-            if (playAttempt && typeof playAttempt.catch === 'function') {
-              playAttempt.catch(() => {});
-            }
+        videoIsInView = entry.isIntersecting && entry.intersectionRatio >= 0.25;
+
+        if (!videoIsInView) {
+          if (!roomVideo.paused && !roomVideo.ended) {
+            shouldResume = true;
+            pausingOffscreen = true;
+            roomVideo.pause();
+            pausingOffscreen = false;
           }
-        } else {
-          resumeOnReturn = !roomVideo.paused && !roomVideo.ended;
-          if (!roomVideo.paused) roomVideo.pause();
+          continue;
+        }
+
+        if (shouldResume && !userPaused && roomVideo.paused && !roomVideo.ended) {
+          const playAttempt = roomVideo.play();
+          if (playAttempt && typeof playAttempt.catch === 'function') {
+            playAttempt.catch(() => {
+              // Autoplay policies may block playback; native controls remain available.
+            });
+          }
         }
       }
     }, { threshold: [0, 0.25] });
 
     roomVideo.addEventListener('pause', () => {
-      // A pause while visible is treated as the viewer choosing to pause.
-      if (document.visibilityState === 'visible' &&
-          roomVideo.getBoundingClientRect().bottom > 0 &&
-          roomVideo.getBoundingClientRect().top < window.innerHeight) {
-        resumeOnReturn = false;
+      if (!pausingOffscreen && videoIsInView) {
+        userPaused = true;
+        shouldResume = false;
       }
     });
 
-    roomVideo.addEventListener('play', () => { resumeOnReturn = true; });
+    roomVideo.addEventListener('play', () => {
+      userPaused = false;
+      shouldResume = true;
+    });
+
     visibilityObserver.observe(roomVideo);
   })();
-
 
 
 </body>
