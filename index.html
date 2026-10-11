@@ -352,9 +352,10 @@
   .footer-logo-text{display:none;}
   .footer-meta{display:flex; flex-wrap:wrap; gap:1.6rem; font-size:0.85rem; color:rgba(247,243,234,0.7); margin-top:1rem;}
   .footer-meta a:hover{color:var(--gold);}
-  .footer-social{display:flex; gap:0.7rem;}
-  .footer-social a{width:34px; height:34px; border-radius:50%; border:1px solid rgba(247,243,234,0.2); display:flex; align-items:center; justify-content:center; font-size:0.72rem; color:rgba(247,243,234,0.7);}
-  .footer-social a:hover{border-color:var(--gold); color:var(--gold);}
+  .footer-social{display:flex;flex-wrap:wrap;gap:0.7rem;align-items:center;}
+  .footer-social a{width:42px;height:42px;flex:0 0 42px;border-radius:50%;border:1px solid rgba(247,243,234,.28);display:inline-flex;align-items:center;justify-content:center;color:rgba(247,243,234,.88);transition:color .2s ease,border-color .2s ease,background .2s ease;}
+  .footer-social a svg{width:19px;height:19px;display:block;fill:currentColor;}
+  .footer-social a:hover,.footer-social a:focus-visible{border-color:var(--gold);color:var(--gold);background:rgba(185,155,92,.1);}
   .footer-bottom{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:1rem; padding-top:1.6rem; border-top:1px solid rgba(247,243,234,0.12); font-size:0.75rem; color:rgba(247,243,234,0.45);}
   .footer-credit{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
   .footer-credit .tt-mark{display:none;} .footer-credit-label{opacity:.58;} .footer-tambala-logo{width:92px;height:auto;display:block;opacity:.48;transition:opacity .2s ease;} .footer-tambala-logo:hover{opacity:.7;}
@@ -755,7 +756,7 @@ body.lightbox-open{overflow:hidden;}
           </video>
           <div class="room-film-player-caption"><span>ROOM TOUR · MALABI EXCLUSIVE LODGES</span><span>EXECUTIVE ROOM</span></div>
         </div>
-        <div class="room-film-note"><span class="room-film-note-mark">✦</span><p>Step inside the Executive Room.</p><span class="room-film-note-label">A BETTER FEEL FOR YOUR STAY, BEFORE YOU ARRIVE.</span><a class="room-film-book" href="#booking">Ask about this room ↗</a></div>
+        <div class="room-film-note"><p>Step inside the Executive Room.</p><span class="room-film-note-label">A BETTER FEEL FOR YOUR STAY, BEFORE YOU ARRIVE.</span><a class="room-film-book" href="#booking">Ask about this room ↗</a></div>
       </div>
     </div>
   </section>
@@ -1137,9 +1138,15 @@ body.lightbox-open{overflow:hidden;}
       <div>
         <div style="font-size:0.78rem; color:rgba(247,243,234,0.6); margin-bottom:0.7rem;">Follow Us</div>
         <div class="footer-social">
-          <a href="https://www.facebook.com/Malabiexclusivelodge.mw" target="_blank" rel="noopener" aria-label="Facebook">Facebook</a>
-          <a href="https://www.instagram.com/malabiexclusivelodge/" target="_blank" rel="noopener" aria-label="Instagram">Instagram</a>
-          <a href="https://www.tiktok.com/@malabiexclusivelodge" target="_blank" rel="noopener" aria-label="TikTok">TikTok</a>
+          <a href="https://www.facebook.com/Malabiexclusivelodge.mw" target="_blank" rel="noopener noreferrer" aria-label="Visit Malabi Exclusive Lodges on Facebook" title="Facebook">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.4 21v-8.2h2.8l.4-3.2h-3.2V7.5c0-.9.3-1.5 1.6-1.5h1.7V3.1c-.3 0-1.4-.1-2.6-.1-2.6 0-4.4 1.6-4.4 4.5v2.1H6.8v3.2h2.9V21h3.7z"/></svg>
+          </a>
+          <a href="https://www.instagram.com/malabiexclusivelodge/" target="_blank" rel="noopener noreferrer" aria-label="Visit Malabi Exclusive Lodges on Instagram" title="Instagram">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.2 2.5h9.6a4.7 4.7 0 0 1 4.7 4.7v9.6a4.7 4.7 0 0 1-4.7 4.7H7.2a4.7 4.7 0 0 1-4.7-4.7V7.2a4.7 4.7 0 0 1 4.7-4.7zm0 1.9a2.8 2.8 0 0 0-2.8 2.8v9.6a2.8 2.8 0 0 0 2.8 2.8h9.6a2.8 2.8 0 0 0 2.8-2.8V7.2a2.8 2.8 0 0 0-2.8-2.8H7.2zm4.8 3.1a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9zm0 1.9a2.6 2.6 0 1 0 0 5.2 2.6 2.6 0 0 0 0-5.2zm4.7-3a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2z"/></svg>
+          </a>
+          <a href="https://www.tiktok.com/@malabiexclusivelodge" target="_blank" rel="noopener noreferrer" aria-label="Visit Malabi Exclusive Lodges on TikTok" title="TikTok">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.6 7.2a6.8 6.8 0 0 1-4.1-1.4v8.1a6.3 6.3 0 1 1-5.4-6.2v3.4a2.9 2.9 0 1 0 2 2.8V2.5h3.4c.2 2.1 1.8 3.8 4.1 4.1v.6z"/></svg>
+          </a>
         </div>
       </div>
     </div>
