@@ -1337,54 +1337,59 @@ body.lightbox-open{overflow:hidden;}
 </script>
 
 <script>
-  // Pause the Executive room video offscreen and resume it when it comes back into view.
+  // Executive room video: pause when out of view, resume on return unless the visitor paused it.
   (() => {
-    const roomVideo = document.querySelector('.room-film-player video[aria-label="Executive room video tour"]');
-    if (!roomVideo || !('IntersectionObserver' in window)) return;
+    const video = document.querySelector('video[aria-label="Executive room video tour"]');
+    if (!video || !('IntersectionObserver' in window)) return;
 
-    let shouldResume = !roomVideo.paused;
-    let userPaused = false;
-    let pausingOffscreen = false;
-    let videoIsInView = false;
+    let inView = false;
+    let manuallyPaused = false;
+    let pauseWasAutomatic = false;
+    let shouldPlay = true;
 
-    const visibilityObserver = new IntersectionObserver((entries) => {
+    const observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
-        videoIsInView = entry.isIntersecting && entry.intersectionRatio >= 0.25;
+        inView = entry.isIntersecting && entry.intersectionRatio >= 0.2;
 
-        if (!videoIsInView) {
-          if (!roomVideo.paused && !roomVideo.ended) {
-            shouldResume = true;
-            pausingOffscreen = true;
-            roomVideo.pause();
-            pausingOffscreen = false;
+        if (!inView) {
+          if (!video.paused) {
+            shouldPlay = true;
+            pauseWasAutomatic = true;
+            video.pause();
+            // Keep the flag until the pause event has had a chance to fire.
+            window.setTimeout(() => { pauseWasAutomatic = false; }, 300);
           }
           continue;
         }
 
-        if (shouldResume && !userPaused && roomVideo.paused && !roomVideo.ended) {
-          const playAttempt = roomVideo.play();
-          if (playAttempt && typeof playAttempt.catch === 'function') {
-            playAttempt.catch(() => {
-              // Autoplay policies may block playback; native controls remain available.
+        if (shouldPlay && !manuallyPaused && video.paused) {
+          const attempt = video.play();
+          if (attempt && typeof attempt.catch === 'function') {
+            attempt.catch(() => {
+              // Browser autoplay restrictions may block playback; controls remain available.
             });
           }
         }
       }
-    }, { threshold: [0, 0.25] });
+    }, { threshold: [0, 0.2] });
 
-    roomVideo.addEventListener('pause', () => {
-      if (!pausingOffscreen && videoIsInView) {
-        userPaused = true;
-        shouldResume = false;
+    video.addEventListener('pause', () => {
+      if (pauseWasAutomatic) {
+        pauseWasAutomatic = false;
+        return;
+      }
+      if (inView) {
+        manuallyPaused = true;
+        shouldPlay = false;
       }
     });
 
-    roomVideo.addEventListener('play', () => {
-      userPaused = false;
-      shouldResume = true;
+    video.addEventListener('play', () => {
+      manuallyPaused = false;
+      shouldPlay = true;
     });
 
-    visibilityObserver.observe(roomVideo);
+    observer.observe(video);
   })();
 </script>
 
