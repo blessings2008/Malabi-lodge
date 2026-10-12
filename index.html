@@ -723,7 +723,7 @@ body.lightbox-open{overflow:hidden;}
       </div>
       <div class="room-film reveal room-film-inline">
         <div class="room-film-player">
-          <video controls muted playsinline webkit-playsinline preload="metadata" poster="/assets/images/image-03.webp" aria-label="Premium room video tour">
+          <video controls muted playsinline webkit-playsinline preload="auto" poster="/assets/images/image-03.webp" aria-label="Premium room video tour">
             <source src="/assets/images/PREMIUM.mp4" type="video/mp4">
             Your browser does not support HTML video.
           </video>
@@ -1337,60 +1337,72 @@ body.lightbox-open{overflow:hidden;}
 </script>
 
 <script>
-  // Executive room video: only start it when its own video enters the viewport.
+  // Room videos: each video starts when it enters view and pauses when it leaves.
   (() => {
-    const video = document.querySelector('video[aria-label="Executive room video tour"]');
-    if (!video) return;
+    const roomVideos = document.querySelectorAll(
+      'video[aria-label="Executive room video tour"], video[aria-label="Premium room video tour"]'
+    );
 
-    let inView = false;
-    let manuallyPaused = false;
-    let automaticPausePending = false;
+    roomVideos.forEach((video) => {
+      let inView = false;
+      let manuallyPaused = false;
+      let automaticPausePending = false;
 
-    const tryPlay = () => {
-      if (!inView || manuallyPaused || !video.paused) return;
-      const playRequest = video.play();
-      if (playRequest && typeof playRequest.catch === 'function') {
-        playRequest.catch((error) => {
-          // Autoplay may be blocked by the browser; keep the native controls usable.
-          console.info('Executive room autoplay was not permitted:', error && error.name ? error.name : error);
-        });
-      }
-    };
+      const tryPlay = () => {
+        if (!inView || manuallyPaused || !video.paused) return;
+        const playRequest = video.play();
+        if (playRequest && typeof playRequest.catch === 'function') {
+          playRequest.catch((error) => {
+            // Browsers may block autoplay; preserve the native controls as a fallback.
+            console.info(video.getAttribute('aria-label') + ' autoplay was not permitted:', error && error.name ? error.name : error);
+          });
+        }
+      };
 
-    video.addEventListener('pause', () => {
-      if (automaticPausePending) {
-        automaticPausePending = false;
-        return;
-      }
-      if (inView) manuallyPaused = true;
-    });
+      video.addEventListener('pause', () => {
+        if (automaticPausePending) {
+          automaticPausePending = false;
+          return;
+        }
+        if (inView) manuallyPaused = true;
+      });
 
-    video.addEventListener('play', () => {
-      manuallyPaused = false;
-    });
+      video.addEventListener('play', () => {
+        manuallyPaused = false;
+      });
 
-    video.addEventListener('loadeddata', tryPlay);
+      video.addEventListener('loadeddata', tryPlay);
 
-    if ('IntersectionObserver' in window) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          inView = entry.isIntersecting && entry.intersectionRatio >= 0.2;
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            inView = entry.isIntersecting && entry.intersectionRatio >= 0.2;
 
-          if (!inView) {
-            if (!video.paused) {
-              automaticPausePending = true;
-              video.pause();
-              window.setTimeout(() => { automaticPausePending = false; }, 500);
+            if (!inView) {
+              if (!video.paused) {
+                automaticPausePending = true;
+                video.pause();
+                window.setTimeout(() => { automaticPausePending = false; }, 500);
+              }
+              return;
             }
-            return;
+
+            if (!manuallyPaused) tryPlay();
+          });
+        }, { threshold: [0, 0.2] });
+
+        observer.observe(video);
+      } else {
+        // Native autoplay is intentionally not required; let controls remain available.
+        // Attempt playback when the browser reports the video is ready.
+        video.addEventListener('canplay', () => {
+          if (!manuallyPaused) {
+            inView = true;
+            tryPlay();
           }
-
-          if (!manuallyPaused) tryPlay();
         });
-      }, { threshold: [0, 0.2] });
-
-      observer.observe(video);
-    }
+      }
+    });
   })();
 </script>
 
