@@ -760,7 +760,7 @@ body.lightbox-open{overflow:hidden;}
       </div>
       <div class="room-film reveal room-film-inline">
         <div class="room-film-player">
-          <video controls autoplay muted loop playsinline webkit-playsinline preload="auto" poster="/assets/images/image-08.webp" aria-label="Executive room video tour">
+          <video controls muted loop playsinline webkit-playsinline preload="auto" poster="/assets/images/image-08.webp" aria-label="Executive room video tour">
             <source src="/assets/images/VID-20261010-WA0005.mp4" type="video/mp4">
             Your browser does not support HTML video.
           </video>
@@ -1337,7 +1337,7 @@ body.lightbox-open{overflow:hidden;}
 </script>
 
 <script>
-  // Executive room video: retry autoplay when visible and respect deliberate visitor pauses.
+  // Executive room video: only start it when its own video enters the viewport.
   (() => {
     const video = document.querySelector('video[aria-label="Executive room video tour"]');
     if (!video) return;
@@ -1345,33 +1345,15 @@ body.lightbox-open{overflow:hidden;}
     let inView = false;
     let manuallyPaused = false;
     let automaticPausePending = false;
-    let resumeWhenVisible = true;
-    let retryTimer = null;
 
-    const clearRetry = () => {
-      if (retryTimer !== null) {
-        window.clearTimeout(retryTimer);
-        retryTimer = null;
-      }
-    };
-
-    const attemptPlayback = () => {
-      if (!inView || manuallyPaused || !resumeWhenVisible || !video.paused) return;
-      clearRetry();
-
-      try {
-        const result = video.play();
-        if (result && typeof result.then === 'function') {
-          result.then(() => {
-            clearRetry();
-          }).catch((error) => {
-            // Browser policy may block autoplay. Keep the intent to resume so a later
-            // loadeddata event or a new visibility entry can trigger another attempt.
-            console.info('Executive room autoplay was not permitted:', error && error.name ? error.name : error);
-          });
-        }
-      } catch (error) {
-        console.info('Executive room playback could not start:', error && error.name ? error.name : error);
+    const tryPlay = () => {
+      if (!inView || manuallyPaused || !video.paused) return;
+      const playRequest = video.play();
+      if (playRequest && typeof playRequest.catch === 'function') {
+        playRequest.catch((error) => {
+          // Autoplay may be blocked by the browser; keep the native controls usable.
+          console.info('Executive room autoplay was not permitted:', error && error.name ? error.name : error);
+        });
       }
     };
 
@@ -1380,59 +1362,34 @@ body.lightbox-open{overflow:hidden;}
         automaticPausePending = false;
         return;
       }
-      // A pause initiated while visible is treated as the visitor's choice.
-      if (inView) {
-        manuallyPaused = true;
-        resumeWhenVisible = false;
-        clearRetry();
-      }
+      if (inView) manuallyPaused = true;
     });
 
     video.addEventListener('play', () => {
       manuallyPaused = false;
-      resumeWhenVisible = true;
-      clearRetry();
     });
 
-    video.addEventListener('error', () => {
-      const mediaError = video.error;
-      console.warn('Executive room video media error:', mediaError ? mediaError.code : 'unknown');
-    });
-
-    video.addEventListener('loadeddata', () => {
-      if (inView) attemptPlayback();
-    });
+    video.addEventListener('loadeddata', tryPlay);
 
     if ('IntersectionObserver' in window) {
       const observer = new IntersectionObserver((entries) => {
-        for (const entry of entries) {
-          const nowInView = entry.isIntersecting && entry.intersectionRatio >= 0.2;
-          if (nowInView === inView) continue;
-          inView = nowInView;
+        entries.forEach((entry) => {
+          inView = entry.isIntersecting && entry.intersectionRatio >= 0.2;
 
           if (!inView) {
-            clearRetry();
             if (!video.paused) {
               automaticPausePending = true;
               video.pause();
-              // Safety reset in case a browser doesn't dispatch the pause event as expected.
               window.setTimeout(() => { automaticPausePending = false; }, 500);
             }
-            if (!manuallyPaused) resumeWhenVisible = true;
-            continue;
+            return;
           }
 
-          if (!manuallyPaused) {
-            resumeWhenVisible = true;
-            attemptPlayback();
-          }
-        }
+          if (!manuallyPaused) tryPlay();
+        });
       }, { threshold: [0, 0.2] });
+
       observer.observe(video);
-    } else {
-      // Older browsers without IntersectionObserver still get the native autoplay attempt.
-      inView = true;
-      attemptPlayback();
     }
   })();
 </script>
