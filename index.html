@@ -1337,59 +1337,112 @@ body.lightbox-open{overflow:hidden;}
 </script>
 
 <script>
-  // Executive room video: pause when out of view, resume on return unless the visitor paused it.
+  // Executive room video: retry autoplay when visible and respect deliberate visitor pauses.
   (() => {
     const video = document.querySelector('video[aria-label="Executive room video tour"]');
-    if (!video || !('IntersectionObserver' in window)) return;
+    if (!video) return;
 
     let inView = false;
     let manuallyPaused = false;
-    let pauseWasAutomatic = false;
-    let shouldPlay = true;
+    let automaticPausePending = false;
+    let resumeWhenVisible = true;
+    let retryTimer = null;
 
-    const observer = new IntersectionObserver((entries) => {
-      for (const entry of entries) {
-        inView = entry.isIntersecting && entry.intersectionRatio >= 0.2;
-
-        if (!inView) {
-          if (!video.paused) {
-            shouldPlay = true;
-            pauseWasAutomatic = true;
-            video.pause();
-            // Keep the flag until the pause event has had a chance to fire.
-            window.setTimeout(() => { pauseWasAutomatic = false; }, 300);
-          }
-          continue;
-        }
-
-        if (shouldPlay && !manuallyPaused && video.paused) {
-          const attempt = video.play();
-          if (attempt && typeof attempt.catch === 'function') {
-            attempt.catch(() => {
-              // Browser autoplay restrictions may block playback; controls remain available.
-            });
-          }
-        }
+    const clearRetry = () => {
+      if (retryTimer !== null) {
+        window.clearTimeout(retryTimer);
+        retryTimer = null;
       }
-    }, { threshold: [0, 0.2] });
+    };
+
+    const attemptPlayback = () => {
+      if (!inView || manuallyPaused || !resumeWhenVisible || !video.paused) return;
+      clearRetry();
+
+      try {
+        const result = video.play();
+        if (result && typeof result.then === 'function') {
+          result.then(() => {
+            clearRetry();
+          }).catch((error) => {
+            // Autoplay can be rejected by browser policy. Keep controls available
+            // and retry once after the browser has had a moment to settle.
+            console.info('Executive room autoplay was not permitted:', error && error.name ? error.name : error);
+            if (inView && !manuallyPaused && resumeWhenVisible) {
+              retryTimer = window.setTimeout(() => {
+                retryTimer = null;
+                if (inView && !manuallyPaused && resumeWhenVisible && video.paused) {
+                  // One retry per visibility entry; avoid repeatedly fighting browser policy.
+                  resumeWhenVisible = false;
+                }
+              }, 700);
+            }
+          });
+        }
+      } catch (error) {
+        console.info('Executive room playback could not start:', error && error.name ? error.name : error);
+      }
+    };
 
     video.addEventListener('pause', () => {
-      if (pauseWasAutomatic) {
-        pauseWasAutomatic = false;
+      if (automaticPausePending) {
+        automaticPausePending = false;
         return;
       }
+      // A pause initiated while visible is treated as the visitor's choice.
       if (inView) {
         manuallyPaused = true;
-        shouldPlay = false;
+        resumeWhenVisible = false;
+        clearRetry();
       }
     });
 
     video.addEventListener('play', () => {
       manuallyPaused = false;
-      shouldPlay = true;
+      resumeWhenVisible = true;
+      clearRetry();
     });
 
-    observer.observe(video);
+    video.addEventListener('error', () => {
+      const mediaError = video.error;
+      console.warn('Executive room video media error:', mediaError ? mediaError.code : 'unknown');
+    });
+
+    video.addEventListener('loadeddata', () => {
+      if (inView) attemptPlayback();
+    });
+
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+          const nowInView = entry.isIntersecting && entry.intersectionRatio >= 0.2;
+          if (nowInView === inView) continue;
+          inView = nowInView;
+
+          if (!inView) {
+            clearRetry();
+            if (!video.paused) {
+              automaticPausePending = true;
+              video.pause();
+              // Safety reset in case a browser doesn't dispatch the pause event as expected.
+              window.setTimeout(() => { automaticPausePending = false; }, 500);
+            }
+            if (!manuallyPaused) resumeWhenVisible = true;
+            continue;
+          }
+
+          if (!manuallyPaused) {
+            resumeWhenVisible = true;
+            attemptPlayback();
+          }
+        }
+      }, { threshold: [0, 0.2] });
+      observer.observe(video);
+    } else {
+      // Older browsers without IntersectionObserver still get the native autoplay attempt.
+      inView = true;
+      attemptPlayback();
+    }
   })();
 </script>
 
