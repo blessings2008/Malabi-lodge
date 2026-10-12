@@ -1365,18 +1365,9 @@ body.lightbox-open{overflow:hidden;}
           result.then(() => {
             clearRetry();
           }).catch((error) => {
-            // Autoplay can be rejected by browser policy. Keep controls available
-            // and retry once after the browser has had a moment to settle.
+            // Browser policy may block autoplay. Keep the intent to resume so a later
+            // loadeddata event or a new visibility entry can trigger another attempt.
             console.info('Executive room autoplay was not permitted:', error && error.name ? error.name : error);
-            if (inView && !manuallyPaused && resumeWhenVisible) {
-              retryTimer = window.setTimeout(() => {
-                retryTimer = null;
-                if (inView && !manuallyPaused && resumeWhenVisible && video.paused) {
-                  // One retry per visibility entry; avoid repeatedly fighting browser policy.
-                  resumeWhenVisible = false;
-                }
-              }, 700);
-            }
           });
         }
       } catch (error) {
