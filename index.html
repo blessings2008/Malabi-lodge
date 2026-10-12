@@ -1336,10 +1336,10 @@ body.lightbox-open{overflow:hidden;}
 
 </script>
 
-
-  // Pause the room video offscreen and resume it when it comes back into view.
+<script>
+  // Pause the Executive room video offscreen and resume it when it comes back into view.
   (() => {
-    const roomVideo = document.querySelector('.room-film-player video');
+    const roomVideo = document.querySelector('.room-film-player video[aria-label="Executive room video tour"]');
     if (!roomVideo || !('IntersectionObserver' in window)) return;
 
     let shouldResume = !roomVideo.paused;
@@ -1386,7 +1386,7 @@ body.lightbox-open{overflow:hidden;}
 
     visibilityObserver.observe(roomVideo);
   })();
-
+</script>
 
 </body>
 </html>
