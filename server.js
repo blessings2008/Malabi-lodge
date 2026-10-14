@@ -76,126 +76,57 @@ function validateEnquiry(body) {
   const room = clean(body.room, 50);
   const message = clean(body.message, 2000);
   const website = clean(body.website, 200);
-
   const errors = [];
-
   if (!name || name.length < 2) errors.push('Please provide your full name.');
   if (!email && !phone) errors.push('Please provide an email address or phone/WhatsApp number.');
   if (email && !isValidEmail(email)) errors.push('Please provide a valid email address.');
   if (checkin && !isValidDate(checkin)) errors.push('Please provide a valid check-in date.');
   if (checkout && !isValidDate(checkout)) errors.push('Please provide a valid check-out date.');
-  if (checkin && checkout && isValidDate(checkin) && isValidDate(checkout) && checkout <= checkin) {
-    errors.push('Check-out must be after check-in.');
-  }
+  if (checkin && checkout && isValidDate(checkin) && isValidDate(checkout) && checkout <= checkin) errors.push('Check-out must be after check-in.');
   if (guests && !allowedGuests.has(guests)) errors.push('Invalid guest count.');
   if (room && !allowedRooms.has(room)) errors.push('Invalid room preference.');
   if (website) errors.push('Spam check failed.');
-
-  return {
-    errors,
-    data: { name, email, phone, checkin, checkout, guests: guests || '2', room: room || 'No preference', message }
-  };
+  return { errors, data: { name, email, phone, checkin, checkout, guests: guests || '2', room: room || 'No preference', message } };
 }
 
 function escapeHtml(value) {
-  return String(value)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/\"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+  return String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;').replace(/'/g, '&#039;');
 }
 
 function emailHtml(data) {
   const rows = [
-    ['Guest', data.name],
-    ['Email', data.email || 'Not provided'],
-    ['Phone / WhatsApp', data.phone || 'Not provided'],
-    ['Check-in', data.checkin || 'Not specified'],
-    ['Check-out', data.checkout || 'Not specified'],
-    ['Guests', data.guests],
-    ['Room preference', data.room],
-    ['Message', data.message || 'No message']
+    ['Guest', data.name], ['Email', data.email || 'Not provided'], ['Phone / WhatsApp', data.phone || 'Not provided'],
+    ['Check-in', data.checkin || 'Not specified'], ['Check-out', data.checkout || 'Not specified'], ['Guests', data.guests],
+    ['Room preference', data.room], ['Message', data.message || 'No message']
   ];
-  return `<!doctype html><html><body style="font-family:Arial,sans-serif;line-height:1.6;color:#1d2a25">
-    <h2>New Booking Enquiry — Malabi Exclusive Lodges</h2>
-    <table cellpadding="8" cellspacing="0" border="0">
-      ${rows.map(([label,value]) => `<tr><td style="font-weight:700;vertical-align:top">${escapeHtml(label)}</td><td>${escapeHtml(value)}</td></tr>`).join('')}
-    </table>
-    <p style="color:#68756f;font-size:13px">Submitted through the Malabi website.</p>
-  </body></html>`;
+  return `<!doctype html><html><body style="font-family:Arial,sans-serif;line-height:1.6;color:#1d2a25"><h2>New Booking Enquiry — Malabi Exclusive Lodges</h2><table cellpadding="8" cellspacing="0" border="0">${rows.map(([label,value]) => `<tr><td style="font-weight:700;vertical-align:top">${escapeHtml(label)}</td><td>${escapeHtml(value)}</td></tr>`).join('')}</table><p style="color:#68756f;font-size:13px">Submitted through the Malabi website.</p></body></html>`;
 }
 
 function emailText(data) {
-  return [
-    'NEW BOOKING ENQUIRY — MALABI EXCLUSIVE LODGES',
-    '',
-    `Guest: ${data.name}`,
-    `Email: ${data.email || 'Not provided'}`,
-    `Phone / WhatsApp: ${data.phone || 'Not provided'}`,
-    `Check-in: ${data.checkin || 'Not specified'}`,
-    `Check-out: ${data.checkout || 'Not specified'}`,
-    `Guests: ${data.guests}`,
-    `Room preference: ${data.room}`,
-    `Message: ${data.message || 'No message'}`
-  ].join('\n');
+  return ['NEW BOOKING ENQUIRY — MALABI EXCLUSIVE LODGES', '', `Guest: ${data.name}`, `Email: ${data.email || 'Not provided'}`, `Phone / WhatsApp: ${data.phone || 'Not provided'}`, `Check-in: ${data.checkin || 'Not specified'}`, `Check-out: ${data.checkout || 'Not specified'}`, `Guests: ${data.guests}`, `Room preference: ${data.room}`, `Message: ${data.message || 'No message'}`].join('\n');
 }
 
-app.get('/health', (_req, res) => {
-  res.json({ ok: true, service: 'malabi-backend' });
-});
+app.get('/health', (_req, res) => res.json({ ok: true, service: 'malabi-backend' }));
 
 app.post('/api/enquiry', enquiryLimiter, async (req, res) => {
   const { errors, data } = validateEnquiry(req.body || {});
-
-  if (errors.length) {
-    return res.status(400).json({ ok: false, message: errors[0], errors });
-  }
-
-  if (!RESEND_API_KEY || !FROM_EMAIL) {
-    console.error('Email configuration is missing.');
-    return res.status(503).json({
-      ok: false,
-      message: 'The enquiry service is temporarily unavailable. Please contact Malabi directly by phone or WhatsApp.'
-    });
-  }
-
+  if (errors.length) return res.status(400).json({ ok: false, message: errors[0], errors });
+  if (!RESEND_API_KEY || !FROM_EMAIL) return res.status(503).json({ ok: false, message: 'The enquiry service is temporarily unavailable. Please contact Malabi directly by phone or WhatsApp.' });
   try {
     const resend = new Resend(RESEND_API_KEY);
-    const { error } = await resend.emails.send({
-      from: FROM_EMAIL,
-      to: [NOTIFICATION_EMAIL],
-      subject: `New booking enquiry — ${data.room} — ${data.checkin || 'Date not specified'}`,
-      html: emailHtml(data),
-      text: emailText(data),
-      replyTo: data.email || undefined
-    });
-
-    if (error) {
-      console.error('Resend error:', error);
-      return res.status(502).json({
-        ok: false,
-        message: 'We could not send your enquiry right now. Please try again or contact Malabi directly.'
-      });
-    }
-
-    return res.json({
-      ok: true,
-      message: 'Your enquiry has been sent. Malabi will contact you shortly.'
-    });
+    const { error } = await resend.emails.send({ from: FROM_EMAIL, to: [NOTIFICATION_EMAIL], subject: `New booking enquiry — ${data.room} — ${data.checkin || 'Date not specified'}`, html: emailHtml(data), text: emailText(data), replyTo: data.email || undefined });
+    if (error) return res.status(502).json({ ok: false, message: 'We could not send your enquiry right now. Please try again or contact Malabi directly.' });
+    return res.json({ ok: true, message: 'Your enquiry has been sent. Malabi will contact you shortly.' });
   } catch (error) {
     console.error('Enquiry error:', error);
-    return res.status(500).json({
-      ok: false,
-      message: 'Something went wrong while sending your enquiry. Please try again.'
-    });
+    return res.status(500).json({ ok: false, message: 'Something went wrong while sending your enquiry. Please try again.' });
   }
 });
 
 const deluxeVideoSection = `
       <div class="room-film reveal room-film-inline deluxe-video-section">
         <div class="room-film-player">
-          <video controls muted playsinline webkit-playsinline preload="auto" aria-label="Deluxe room video tour">
+          <video controls autoplay muted playsinline webkit-playsinline preload="auto" aria-label="Deluxe room video tour">
             <source src="/assets/images/Dulex%20Loom%20v2.mp4" type="video/mp4">
             Your browser does not support HTML video.
           </video>
@@ -208,36 +139,12 @@ app.get('/', (_req, res) => {
   const indexPath = path.join(__dirname, 'index.html');
   let html = fs.readFileSync(indexPath, 'utf8');
   const deluxeGalleryPattern = /(<div class="room-gallery reveal deluxe-gallery">[\s\S]*?<\/div>)(\s*<\/div>\s*<\/section>)/;
-
-  if (!html.includes('aria-label="Deluxe room video tour"')) {
-    html = html.replace(deluxeGalleryPattern, `$1${deluxeVideoSection}$2`);
-  }
-
-  if (!html.includes('/assets/js/deluxe-video.js')) {
-    html = html.replace('</body>', '  <script src="/assets/js/deluxe-video.js"></script>\n</body>');
-  }
-
+  if (!html.includes('aria-label="Deluxe room video tour"')) html = html.replace(deluxeGalleryPattern, `$1${deluxeVideoSection}$2`);
+  if (!html.includes('/assets/js/deluxe-video.js')) html = html.replace('</body>', '  <script src="/assets/js/deluxe-video.js"></script>\n</body>');
   res.send(html);
 });
 
-app.get('/assets/logo.webp', (_req, res) => {
-  res.sendFile(path.join(__dirname, 'assets', 'images', 'malabi-office-logo.png'), {
-    headers: { 'Cache-Control': 'public, max-age=604800, immutable' }
-  });
-});
-
-app.use('/assets', express.static(path.join(__dirname, 'assets'), {
-  maxAge: '7d',
-  immutable: true
-}));
-
-app.use((req, res) => {
-  if (req.path.startsWith('/api/')) {
-    return res.status(404).json({ ok: false, message: 'API endpoint not found.' });
-  }
-  res.status(404).send('Page not found');
-});
-
-app.listen(PORT, () => {
-  console.log(`Malabi server listening on port ${PORT}`);
-});
+app.get('/assets/logo.webp', (_req, res) => res.sendFile(path.join(__dirname, 'assets', 'images', 'malabi-office-logo.png'), { headers: { 'Cache-Control': 'public, max-age=604800, immutable' } }));
+app.use('/assets', express.static(path.join(__dirname, 'assets'), { maxAge: '7d', immutable: true }));
+app.use((req, res) => { if (req.path.startsWith('/api/')) return res.status(404).json({ ok: false, message: 'API endpoint not found.' }); res.status(404).send('Page not found'); });
+app.listen(PORT, () => console.log(`Malabi backend listening on ${PORT}`));
