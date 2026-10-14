@@ -195,8 +195,8 @@ app.post('/api/enquiry', enquiryLimiter, async (req, res) => {
 const deluxeVideoSection = `
       <div class="room-film reveal room-film-inline deluxe-video-section">
         <div class="room-film-player">
-          <video controls muted playsinline webkit-playsinline preload="auto" poster="/assets/images/IMG-20261010-WA0000.jpg" aria-label="Deluxe room video tour">
-            <source src="/assets/images/DULEX LOOM.mp4" type="video/mp4">
+          <video controls muted playsinline webkit-playsinline preload="auto" aria-label="Deluxe room video tour">
+            <source src="/assets/images/Dulex%20Loom%20v2.mp4" type="video/mp4">
             Your browser does not support HTML video.
           </video>
           <div class="room-film-player-caption"><span>ROOM TOUR · MALABI EXCLUSIVE LODGES</span><span>DELUXE ROOM</span></div>
@@ -211,6 +211,10 @@ app.get('/', (_req, res) => {
 
   if (!html.includes('aria-label="Deluxe room video tour"')) {
     html = html.replace(deluxeGalleryPattern, `$1${deluxeVideoSection}$2`);
+  }
+
+  if (!html.includes('/assets/js/deluxe-video.js')) {
+    html = html.replace('</body>', '  <script src="/assets/js/deluxe-video.js"></script>\n</body>');
   }
 
   res.send(html);
