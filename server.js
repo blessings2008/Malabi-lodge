@@ -1,5 +1,4 @@
 const path = require('path');
-const fs = require('fs');
 const express = require('express');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
@@ -192,91 +191,8 @@ app.post('/api/enquiry', enquiryLimiter, async (req, res) => {
   }
 });
 
-const deluxeVideoMarkup = `
-      <div class="room-film reveal room-film-inline">
-        <div class="room-film-player">
-          <video controls muted loop playsinline webkit-playsinline preload="auto" poster="/assets/images/IMG-20261010-WA0000.jpg" aria-label="Deluxe room video tour">
-            <source src="/assets/images/DULEX%20LOOM.mp4" type="video/mp4">
-            Your browser does not support HTML video.
-          </video>
-          <div class="room-film-player-caption"><span>ROOM TOUR · MALABI EXCLUSIVE LODGES</span><span>DELUXE ROOM</span></div>
-        </div>
-        <div class="room-film-note"><p>Step inside the Deluxe Room.</p><span class="room-film-note-label">A CLOSER LOOK AT THE ROOM BEFORE YOU ARRIVE.</span><a class="room-film-book" href="#booking">Ask about this room ↗</a></div>
-      </div>`;
-
-const deluxeVideoScript = `
-<script>
-  // Deluxe room video: independent viewport playback so it cannot control another room video.
-  (() => {
-    const video = document.querySelector('video[aria-label="Deluxe room video tour"]');
-    if (!video || !('IntersectionObserver' in window)) return;
-    let inView = false;
-    let manuallyPaused = false;
-    let automaticPause = false;
-
-    const tryPlay = () => {
-      if (!inView || manuallyPaused || !video.paused) return;
-      const request = video.play();
-      if (request && typeof request.catch === 'function') {
-        request.catch(() => {});
-      }
-    };
-
-    video.addEventListener('pause', () => {
-      if (automaticPause) {
-        automaticPause = false;
-        return;
-      }
-      if (inView) manuallyPaused = true;
-    });
-
-    video.addEventListener('play', () => {
-      manuallyPaused = false;
-    });
-
-    video.addEventListener('loadeddata', tryPlay);
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        const visible = entry.isIntersecting && entry.intersectionRatio >= 0.2;
-        if (visible === inView) return;
-        inView = visible;
-
-        if (!inView) {
-          if (!video.paused) {
-            automaticPause = true;
-            video.pause();
-            window.setTimeout(() => { automaticPause = false; }, 500);
-          }
-          return;
-        }
-
-        if (!manuallyPaused) tryPlay();
-      });
-    }, { threshold: [0, 0.2] });
-
-    observer.observe(video);
-  })();
-</script>`;
-
 app.get('/', (_req, res) => {
-  const indexPath = path.join(__dirname, 'index.html');
-  fs.readFile(indexPath, 'utf8', (error, html) => {
-    if (error) {
-      console.error('Failed to load homepage:', error);
-      return res.status(500).send('Unable to load website');
-    }
-
-    const deluxeMarker = `      </div>\n    </div>\n  </section>\n\n  <!-- FAMILY ROOM -->`;
-    const deluxeIndex = html.indexOf(deluxeMarker);
-    if (deluxeIndex === -1) {
-      return res.status(500).send('Website template could not be prepared.');
-    }
-
-    let page = html.slice(0, deluxeIndex) + `      </div>${deluxeVideoMarkup}\n    </div>\n  </section>\n\n  <!-- FAMILY ROOM -->` + html.slice(deluxeIndex + deluxeMarker.length);
-    page = page.replace('</body>', `${deluxeVideoScript}\n</body>`);
-    res.type('html').send(page);
-  });
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.get('/assets/logo.webp', (_req, res) => {
