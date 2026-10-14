@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 const express = require('express');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
@@ -191,8 +192,28 @@ app.post('/api/enquiry', enquiryLimiter, async (req, res) => {
   }
 });
 
+const deluxeVideoSection = `
+      <div class="room-film reveal room-film-inline deluxe-video-section">
+        <div class="room-film-player">
+          <video controls muted playsinline webkit-playsinline preload="auto" poster="/assets/images/IMG-20261010-WA0000.jpg" aria-label="Deluxe room video tour">
+            <source src="/assets/images/DULEX LOOM.mp4" type="video/mp4">
+            Your browser does not support HTML video.
+          </video>
+          <div class="room-film-player-caption"><span>ROOM TOUR · MALABI EXCLUSIVE LODGES</span><span>DELUXE ROOM</span></div>
+        </div>
+        <div class="room-film-note"><p>Step inside the Deluxe Room.</p><span class="room-film-note-label">A CLOSER LOOK AT OUR DELUXE ROOMS.</span><a class="room-film-book" href="#booking">Ask about this room ↗</a></div>
+      </div>`;
+
 app.get('/', (_req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  const indexPath = path.join(__dirname, 'index.html');
+  let html = fs.readFileSync(indexPath, 'utf8');
+  const deluxeGalleryPattern = /(<div class="room-gallery reveal deluxe-gallery">[\s\S]*?<\/div>)(\s*<\/div>\s*<\/section>)/;
+
+  if (!html.includes('aria-label="Deluxe room video tour"')) {
+    html = html.replace(deluxeGalleryPattern, `$1${deluxeVideoSection}$2`);
+  }
+
+  res.send(html);
 });
 
 app.get('/assets/logo.webp', (_req, res) => {
