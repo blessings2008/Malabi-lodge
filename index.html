@@ -655,6 +655,38 @@ body.lightbox-open{overflow:hidden;}
   .room-gallery:not(.featured):has(> a:nth-child(4)) a:first-child{grid-column:span 2;}
 }
 
+
+
+/* Final layout correction: prevent the desktop header and location panel
+   from competing for space at intermediate laptop/tablet widths. */
+@media (min-width:1040px) and (max-width:1099px){
+  .nav-links,.nav-cta{display:none !important;}
+  .mobile-toggle{display:flex !important;}
+}
+@media (min-width:1100px) and (max-width:1199px){
+  .nav-inner{gap:1rem;}
+  .nav-links{gap:clamp(.65rem,1vw,1rem);font-size:.72rem;white-space:nowrap;}
+  .nav-cta{padding:10px 14px;font-size:.74rem;white-space:nowrap;}
+  .logo-text{font-size:1.02rem;letter-spacing:.1em;}
+  .logo-sub{font-size:.48rem;}
+}
+
+/* Keep the map and its details from squeezing into overlapping columns. */
+.loc-grid,.loc-info,.map-embed{min-width:0;}
+.loc-info{overflow-wrap:anywhere;}
+@media (min-width:900px) and (max-width:1099px){
+  .loc-grid{grid-template-columns:minmax(0,1fr) !important;gap:2.5rem;}
+  .map-embed{width:100%;aspect-ratio:16/9;min-height:340px;}
+}
+@media (min-width:1100px){
+  .loc-grid{grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:clamp(2rem,3vw,3.5rem);align-items:center;}
+  .map-embed{width:100%;aspect-ratio:16/11;min-height:420px;}
+  .map-embed iframe{display:block;width:100%;height:100%;min-height:inherit;}
+}
+@media (min-width:1200px){
+  .map-embed{min-height:520px;}
+}
+
 </style>
 </head>
 <body>
