@@ -622,6 +622,39 @@ body.lightbox-open{overflow:hidden;}
     .submit-btn{min-height:50px;}
   }
 
+
+/* Desktop and laptop refinement: preserve readable two-column layouts without forcing
+   laptop-sized screens into oversized single-column tablet layouts. */
+@media (min-width:1024px) and (max-width:1199px){
+  .wrap{max-width:1200px;padding-left:40px;padding-right:40px;}
+  .nav-inner{max-width:1200px;padding-left:40px;padding-right:40px;}
+  .hero-content{max-width:1200px;padding-left:40px;padding-right:40px;}
+  .journey-grid{grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:2.5rem;align-items:center;}
+  .journey-icons{grid-template-columns:repeat(5,minmax(0,1fr));gap:.6rem;}
+  .fac-grid{grid-template-columns:minmax(0,.72fr) minmax(0,1.28fr);gap:2.5rem;}
+  .dining-grid,.story-grid,.loc-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:2.8rem;}
+  .gallery-grid-inner{grid-template-columns:minmax(0,.72fr) minmax(0,1.28fr);gap:2.5rem;}
+  .gallery-mosaic{grid-template-columns:repeat(3,minmax(0,1fr));}
+  .booking-grid{grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:2.8rem;align-items:center;}
+  .booking-form-card{padding:1.5rem;}
+  .room-gallery{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
+  .room-section.compact .room-gallery{grid-template-columns:repeat(3,minmax(0,1fr));}
+  .room-film-inline{grid-template-columns:minmax(0,1.5fr) minmax(190px,.7fr);}
+  .map-embed{min-height:420px;}
+}
+
+/* Only enlarge the lead image when a room gallery has enough images to balance it.
+   This prevents 2- and 3-photo rooms from leaving empty desktop grid cells. */
+.room-gallery:not(.featured) a:first-child{grid-column:auto;}
+.room-gallery:not(.featured):has(> a:nth-child(4)) a:first-child{grid-column:span 2;}
+.room-gallery:not(.featured):has(> a:nth-child(4)) a:first-child img{aspect-ratio:16/9;}
+
+@media (min-width:1200px){
+  .room-gallery:not(.featured){grid-template-columns:repeat(4,minmax(0,1fr));}
+  .room-section.compact .room-gallery{grid-template-columns:repeat(4,minmax(0,1fr));}
+  .room-gallery:not(.featured):has(> a:nth-child(4)) a:first-child{grid-column:span 2;}
+}
+
 </style>
 </head>
 <body>
