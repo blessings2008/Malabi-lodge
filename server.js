@@ -106,6 +106,9 @@ function emailText(data) {
   return ['NEW BOOKING ENQUIRY — MALABI EXCLUSIVE LODGES', '', `Guest: ${data.name}`, `Email: ${data.email || 'Not provided'}`, `Phone / WhatsApp: ${data.phone || 'Not provided'}`, `Check-in: ${data.checkin || 'Not specified'}`, `Check-out: ${data.checkout || 'Not specified'}`, `Guests: ${data.guests}`, `Room preference: ${data.room}`, `Message: ${data.message || 'No message'}`].join('\n');
 }
 
+app.get('/robots.txt', (_req, res) => res.type('text/plain').sendFile(path.join(__dirname, 'robots.txt')));
+app.get('/sitemap.xml', (_req, res) => res.type('application/xml').sendFile(path.join(__dirname, 'sitemap.xml')));
+
 app.get('/health', (_req, res) => res.json({ ok: true, service: 'malabi-backend' }));
 
 app.post('/api/enquiry', enquiryLimiter, async (req, res) => {
