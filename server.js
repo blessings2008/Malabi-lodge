@@ -126,35 +126,7 @@ app.post('/api/enquiry', enquiryLimiter, async (req, res) => {
   }
 });
 
-const deluxeVideoSection = `
-      <div class="room-film reveal room-film-inline">
-        <div class="room-film-player">
-          <video controls muted playsinline webkit-playsinline preload="auto" aria-label="Deluxe room video tour">
-            <source src="/assets/images/Dulex%20Loom%20v2.mp4" type="video/mp4">
-            Your browser does not support HTML video.
-          </video>
-          <div class="room-film-player-caption"><span>ROOM TOUR · MALABI EXCLUSIVE LODGES</span><span>DELUXE ROOM</span></div>
-        </div>
-        <div class="room-film-note"><p>Step inside the Deluxe Room.</p><span class="room-film-note-label">A CLOSER LOOK AT OUR DELUXE ROOMS.</span><a class="room-film-book" href="#booking">Ask about this room ↗</a></div>
-      </div>`;
-
-app.get('/', (_req, res) => {
-  const indexPath = path.join(__dirname, 'index.html');
-  let html = fs.readFileSync(indexPath, 'utf8');
-
-  // Keep the Deluxe video markup structurally identical to the other room-film sections.
-  // This replaces only the existing Deluxe video block, leaving the rest of index.html untouched.
-  const deluxeFilmPattern = /(<div class="room-gallery reveal deluxe-gallery">[\s\S]*?<\/div>)\s*<div class="room-film reveal room-film-inline">[\s\S]*?<\/section>\s*<!-- FAMILY ROOM -->/;
-  if (deluxeFilmPattern.test(html)) {
-    html = html.replace(deluxeFilmPattern, `$1${deluxeVideoSection}\n  </section>\n\n  <!-- FAMILY ROOM -->`);
-  } else if (!html.includes('aria-label="Deluxe room video tour"')) {
-    const deluxeGalleryPattern = /(<div class="room-gallery reveal deluxe-gallery">[\s\S]*?<\/div>)(\s*<\/div>\s*<\/section>)/;
-    html = html.replace(deluxeGalleryPattern, `$1${deluxeVideoSection}$2`);
-  }
-
-  if (!html.includes('/assets/js/deluxe-video.js')) html = html.replace('</body>', '  <script src="/assets/js/deluxe-video.js"></script>\n</body>');
-  res.send(html);
-});
+app.get('/', (_req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 
 app.get('/assets/logo.webp', (_req, res) => res.sendFile(path.join(__dirname, 'assets', 'images', 'malabi-office-logo.png'), { headers: { 'Cache-Control': 'public, max-age=604800, immutable' } }));
 app.use('/assets', express.static(path.join(__dirname, 'assets'), { maxAge: '7d', immutable: true }));
