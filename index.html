@@ -695,6 +695,34 @@ body.lightbox-open{overflow:hidden;}
 
 
   .gallery-grid-inner > .gallery-video-pending{grid-column:1/-1;}
+
+  /* Events: occasion cards supported by real property photography */
+  .events{padding:82px 0;background:var(--ivory-panel);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .events-head{display:grid;grid-template-columns:1fr;gap:1.3rem;align-items:end;margin-bottom:2rem;}
+  @media(min-width:820px){.events-head{grid-template-columns:1fr .8fr;gap:3rem;}}
+  .events-title{font-family:var(--font-display);font-weight:500;font-size:clamp(2rem,5vw,3.15rem);line-height:1.08;color:var(--green-deep);max-width:13ch;}
+  .events-desc{font-size:.92rem;color:var(--text-dim);max-width:48ch;}
+  .events-actions{margin-top:1.1rem;}
+  .events-grid{display:grid;grid-template-columns:1fr;gap:12px;margin:2rem 0 1.5rem;}
+  @media(min-width:700px){.events-grid{grid-template-columns:repeat(3,minmax(0,1fr));}}
+  .event-card{min-height:158px;padding:23px 22px;background:rgba(255,255,255,.58);border:1px solid var(--line);border-radius:8px;display:flex;flex-direction:column;justify-content:space-between;gap:1.5rem;transition:transform .25s ease,border-color .25s ease,background .25s ease;}
+  .event-card:hover{transform:translateY(-3px);border-color:rgba(185,155,92,.65);background:#fff;}
+  .event-card-number{font-size:.64rem;letter-spacing:.15em;font-weight:700;color:#987d49;}
+  .event-card h3{font-family:var(--font-display);font-size:1.55rem;line-height:1.1;font-weight:500;color:var(--green-deep);}
+  .event-card p{font-size:.8rem;color:var(--text-dim);margin-top:.45rem;line-height:1.55;}
+  .events-gallery{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:180px 180px;gap:10px;margin-top:2rem;}
+  .events-photo{position:relative;min-width:0;overflow:hidden;border-radius:8px;background:var(--green-deep);}
+  .events-photo-main{grid-row:span 2;}
+  .events-photo img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease;filter:saturate(.9);}
+  .events-photo:hover img{transform:scale(1.035);}
+  .events-photo:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(12,20,13,.78),transparent 58%);pointer-events:none;}
+  .events-photo figcaption{position:absolute;z-index:1;left:18px;right:14px;bottom:16px;color:#fff;display:flex;flex-direction:column;gap:3px;}
+  .events-photo figcaption span{font-size:.58rem;letter-spacing:.16em;font-weight:700;color:#e3c98e;}
+  .events-photo figcaption strong{font-family:var(--font-display);font-size:clamp(1.05rem,2vw,1.45rem);font-weight:500;line-height:1.1;}
+  .events-footnote{margin-top:1rem;color:var(--text-dim);font-size:.72rem;max-width:78ch;}
+  @media(min-width:800px){.events-gallery{grid-template-columns:1.35fr 1fr 1fr;grid-template-rows:270px;}.events-photo-main{grid-row:auto;}}
+  @media(max-width:420px){.events{padding:62px 0;}.events-gallery{grid-template-rows:150px 150px;gap:7px;}.events-photo figcaption{left:11px;bottom:11px;}.events-photo figcaption span{font-size:.52rem;}.events-photo figcaption strong{font-size:1rem;}}
+
 </style>
 </head>
 <body>
@@ -998,11 +1026,37 @@ body.lightbox-open{overflow:hidden;}
           <div class="events-actions"><a href="#booking" class="btn btn-primary">Make an Event Enquiry →</a></div>
         </div>
       </div>
+
       <div class="events-grid">
-        <article class="event-card reveal"><div class="event-card-number">01 · WEDDINGS</div><div><h3>Wedding Celebrations</h3><p>Discuss hosting your wedding celebration at Malabi.</p></div></article>
-        <article class="event-card reveal"><div class="event-card-number">02 · CELEBRATIONS</div><div><h3>Bridal Showers &amp; Parties</h3><p>Plan a special gathering with family and friends.</p></div></article>
-        <article class="event-card reveal"><div class="event-card-number">03 · GATHERINGS</div><div><h3>Private Functions</h3><p>Ask our team about arrangements for your event.</p></div></article>
+        <article class="event-card reveal">
+          <div class="event-card-number">01 · WEDDINGS</div>
+          <div><h3>Wedding Celebrations</h3><p>Discuss hosting your wedding celebration at Malabi.</p></div>
+        </article>
+        <article class="event-card reveal">
+          <div class="event-card-number">02 · CELEBRATIONS</div>
+          <div><h3>Bridal Showers &amp; Parties</h3><p>Plan a special gathering with family and friends.</p></div>
+        </article>
+        <article class="event-card reveal">
+          <div class="event-card-number">03 · GATHERINGS</div>
+          <div><h3>Private Functions</h3><p>Ask our team about arrangements for your event.</p></div>
+        </article>
       </div>
+
+      <div class="events-gallery reveal" aria-label="Views of Malabi Exclusive Lodges">
+        <figure class="events-photo events-photo-main">
+          <img src="assets/images/image-25.webp" alt="Malabi Exclusive Lodges exterior and landscaped lawn" loading="lazy" decoding="async">
+          <figcaption><span>THE GROUNDS</span><strong>A welcoming setting</strong></figcaption>
+        </figure>
+        <figure class="events-photo">
+          <img src="assets/images/image-23.webp" alt="Malabi swimming pool with umbrella and outdoor seating" loading="lazy" decoding="async">
+          <figcaption><span>POOL &amp; LEISURE</span><strong>Relax between moments</strong></figcaption>
+        </figure>
+        <figure class="events-photo">
+          <img src="assets/images/image-22.webp" alt="Garden at Malabi Exclusive Lodges" loading="lazy" decoding="async">
+          <figcaption><span>GARDEN</span><strong>Enjoy the outdoors</strong></figcaption>
+        </figure>
+      </div>
+      <p class="events-footnote">Event arrangements are discussed individually with the Malabi team. Contact the lodge to confirm suitability and availability for your occasion.</p>
     </div>
   </section>
 
