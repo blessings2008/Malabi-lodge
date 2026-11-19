@@ -1,72 +1,100 @@
-/* Malabi Deluxe Room video controller
- * Independent viewport playback for the Deluxe room tour.
+/* Malabi room video controller
+ * Starts every video when it enters the viewport and pauses it when it leaves.
+ * Visitors can always pause playback manually.
  */
 (() => {
   const start = () => {
-    const video = document.querySelector('video[aria-label="Deluxe room video tour"]');
-    if (!video) return;
+    const videos = Array.from(document.querySelectorAll('video'));
+    if (!videos.length) return;
 
-    let inView = false;
-    let manualPause = false;
-    let automaticPause = false;
+    const states = new Map();
 
-    const tryPlay = () => {
-      if (!inView || manualPause || !video.paused) return;
-      const request = video.play();
-      if (request && typeof request.catch === 'function') {
-        request.catch((error) => {
-          console.info('Deluxe room autoplay was not permitted:', error?.name || error);
-        });
-      }
-    };
+    const updateVisibility = (video, visible) => {
+      const state = states.get(video);
+      if (!state) return;
+      state.inView = visible;
 
-    video.addEventListener('pause', () => {
-      if (automaticPause) {
-        automaticPause = false;
-        return;
-      }
-      if (inView) manualPause = true;
-    });
-
-    video.addEventListener('play', () => {
-      manualPause = false;
-    });
-
-    ['loadedmetadata', 'loadeddata', 'canplay'].forEach((eventName) => {
-      video.addEventListener(eventName, tryPlay);
-    });
-
-    const updateVisibility = (visible) => {
-      inView = visible;
-      if (!inView) {
+      if (!visible) {
         if (!video.paused) {
-          automaticPause = true;
+          state.automaticPause = true;
           video.pause();
-          window.setTimeout(() => { automaticPause = false; }, 500);
         }
         return;
       }
-      if (!manualPause) tryPlay();
+
+      if (!state.manualPause && video.paused) {
+        const request = video.play();
+        if (request && typeof request.catch === 'function') {
+          request.catch((error) => {
+            console.info('Video autoplay was not permitted:', error?.name || error);
+          });
+        }
+      }
     };
+
+    videos.forEach((video) => {
+      // Muted inline playback is required for reliable autoplay on mobile browsers.
+      video.muted = true;
+      video.setAttribute('muted', '');
+      video.playsInline = true;
+      video.setAttribute('playsinline', '');
+
+      const state = {
+        inView: false,
+        manualPause: false,
+        automaticPause: false
+      };
+      states.set(video, state);
+
+      video.addEventListener('pause', () => {
+        if (state.automaticPause) {
+          state.automaticPause = false;
+          return;
+        }
+        if (state.inView) state.manualPause = true;
+      });
+
+      video.addEventListener('play', () => {
+        state.manualPause = false;
+      });
+
+      ['loadedmetadata', 'loadeddata', 'canplay'].forEach((eventName) => {
+        video.addEventListener(eventName, () => {
+          if (state.inView && !state.manualPause && video.paused) {
+            const request = video.play();
+            if (request && typeof request.catch === 'function') {
+              request.catch((error) => {
+                console.info('Video autoplay was not permitted:', error?.name || error);
+              });
+            }
+          }
+        });
+      });
+    });
 
     if ('IntersectionObserver' in window) {
       const observer = new IntersectionObserver((entries) => {
-        const entry = entries[0];
-        updateVisibility(entry.isIntersecting && entry.intersectionRatio >= 0.15);
+        entries.forEach((entry) => {
+          updateVisibility(entry.target, entry.isIntersecting && entry.intersectionRatio >= 0.15);
+        });
       }, { threshold: [0, 0.15, 0.5] });
-      observer.observe(video);
+      videos.forEach((video) => observer.observe(video));
     }
 
-    // Keep a scroll-based fallback for older browsers and unusual observer failures.
+    // Fallback for browsers without IntersectionObserver.
     const checkVisibility = () => {
-      const rect = video.getBoundingClientRect();
-      const visible = rect.bottom > 0 && rect.top < window.innerHeight &&
-        Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0) >= Math.min(rect.height * 0.15, 120);
-      updateVisibility(visible);
+      videos.forEach((video) => {
+        const rect = video.getBoundingClientRect();
+        const visible = rect.bottom > 0 && rect.top < window.innerHeight &&
+          Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0) >= Math.min(rect.height * 0.15, 120);
+        updateVisibility(video, visible);
+      });
     };
 
-    window.addEventListener('scroll', checkVisibility, { passive: true });
-    window.addEventListener('resize', checkVisibility);
+    if (!('IntersectionObserver' in window)) {
+      window.addEventListener('scroll', checkVisibility, { passive: true });
+      window.addEventListener('resize', checkVisibility);
+    }
     checkVisibility();
   };
 
