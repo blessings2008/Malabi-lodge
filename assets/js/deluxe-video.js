@@ -36,10 +36,8 @@
       video.addEventListener(eventName, tryPlay);
     });
 
-    const observer = new IntersectionObserver((entries) => {
-      const entry = entries[0];
-      inView = entry.isIntersecting && entry.intersectionRatio >= 0.15;
-
+    const updateVisibility = (visible) => {
+      inView = visible;
       if (!inView) {
         if (!video.paused) {
           automaticPause = true;
@@ -48,22 +46,28 @@
         }
         return;
       }
-
       if (!manualPause) tryPlay();
-    }, { threshold: [0, 0.15, 0.5] });
+    };
 
-    observer.observe(video);
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        const entry = entries[0];
+        updateVisibility(entry.isIntersecting && entry.intersectionRatio >= 0.15);
+      }, { threshold: [0, 0.15, 0.5] });
+      observer.observe(video);
+    }
 
-    // Fallback for browsers where IntersectionObserver doesn't fire reliably.
+    // Keep a scroll-based fallback for older browsers and unusual observer failures.
     const checkVisibility = () => {
       const rect = video.getBoundingClientRect();
-      inView = rect.bottom > 0 && rect.top < window.innerHeight &&
+      const visible = rect.bottom > 0 && rect.top < window.innerHeight &&
         Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0) >= Math.min(rect.height * 0.15, 120);
-      if (inView && !manualPause) tryPlay();
+      updateVisibility(visible);
     };
 
     window.addEventListener('scroll', checkVisibility, { passive: true });
     window.addEventListener('resize', checkVisibility);
+    checkVisibility();
   };
 
   if (document.readyState === 'loading') {
