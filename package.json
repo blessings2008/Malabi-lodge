@@ -6,7 +6,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "prestart": "node scripts/optimize-images.js"
+    "prestart": "node scripts/optimize-images.js",
+    "postinstall": "node scripts/optimize-videos.js"
   },
   "engines": {
     "node": ">=20"
@@ -16,6 +17,7 @@
     "express-rate-limit": "^8.1.0",
     "helmet": "^8.1.0",
     "resend": "^6.1.0",
-    "sharp": "^0.34.5"
+    "sharp": "^0.34.5",
+    "ffmpeg-static": "^5.2.0"
   }
 }
