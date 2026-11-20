@@ -1,6 +1,6 @@
-/* Malabi room-video autoplay controller
- * Start muted videos as they enter the viewport, and pause them when they
- * leave it. Visitors can still use the native controls to pause or resume.
+/* Malabi room-video controller
+ * Warm the next video shortly before it enters view, then autoplay muted
+ * while visible. Pause videos that leave the viewing area.
  */
 (() => {
   const videos = [...document.querySelectorAll('video')];
@@ -12,22 +12,25 @@
     video.muted = true;
     video.defaultMuted = true;
     video.setAttribute('muted', '');
-    video.autoplay = false; // Playback is managed by the visibility observer.
+    video.autoplay = false;
     video.removeAttribute('autoplay');
     video.playsInline = true;
     video.setAttribute('playsinline', '');
     video.setAttribute('webkit-playsinline', '');
     video.preload = 'none';
     video.setAttribute('preload', 'none');
-    state.set(video, { userPaused: false, pausingForVisibility: false });
+    state.set(video, {
+      userPaused: false,
+      pausingForVisibility: false,
+      preloaded: false
+    });
 
     video.addEventListener('pause', () => {
       const current = state.get(video);
       if (!current.pausingForVisibility && !video.ended) current.userPaused = true;
     });
     video.addEventListener('play', () => {
-      const current = state.get(video);
-      current.userPaused = false;
+      state.get(video).userPaused = false;
       videos.forEach((other) => {
         if (other === video || other.paused) return;
         const otherState = state.get(other);
@@ -49,7 +52,24 @@
     return;
   }
 
-  const observer = new IntersectionObserver((entries) => {
+  // Start fetching a video up to 700px before it becomes visible.
+  // This gives the browser a head start without downloading every video on page load.
+  const preloadObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      const video = entry.target;
+      const current = state.get(video);
+      if (!current.preloaded) {
+        current.preloaded = true;
+        video.preload = 'auto';
+        video.setAttribute('preload', 'auto');
+        video.load();
+      }
+      observer.unobserve(video);
+    });
+  }, { rootMargin: '700px 0px', threshold: 0 });
+
+  const playbackObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       const video = entry.target;
       const current = state.get(video);
@@ -59,7 +79,7 @@
           const playback = video.play();
           if (playback && typeof playback.catch === 'function') playback.catch(() => {});
         }
-      } else {
+      } else if (!entry.isIntersecting || entry.intersectionRatio < 0.45) {
         current.userPaused = false;
         if (!video.paused) {
           current.pausingForVisibility = true;
@@ -70,5 +90,8 @@
     });
   }, { threshold: [0, 0.45, 0.7] });
 
-  videos.forEach((video) => observer.observe(video));
+  videos.forEach((video) => {
+    preloadObserver.observe(video);
+    playbackObserver.observe(video);
+  });
 })();
