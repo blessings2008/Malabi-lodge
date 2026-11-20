@@ -25,7 +25,6 @@ async function main() {
     if (!metadata.width || !metadata.height) continue;
 
     for (const width of widths) {
-      if (metadata.width <= width && width !== widths[0]) continue;
       const output = path.join(outputDir, `${base}-${width}.webp`);
       try {
         await fs.access(output);
