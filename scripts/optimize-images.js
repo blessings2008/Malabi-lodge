@@ -9,7 +9,7 @@ const sharp = require('sharp');
 const imageDir = path.join(__dirname, '..', 'assets', 'images');
 const outputDir = path.join(imageDir, 'optimized');
 const widths = [480, 768, 1200];
-const supported = /\\.(?:jpe?g|png|webp)$/i;
+const supported = /\.(?:jpe?g|png|webp)$/i;
 const skip = /(?:logo|icon)/i;
 
 async function main() {
