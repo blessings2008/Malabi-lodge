@@ -6,8 +6,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "prestart": "node scripts/optimize-images.js",
-    "postinstall": "node scripts/optimize-videos.js"
+    "postinstall": "node scripts/optimize-videos.js && node scripts/optimize-images.js"
   },
   "engines": {
     "node": ">=20"
