@@ -36,6 +36,11 @@
     const registerVideo = (video) => {
       if (!(video instanceof HTMLVideoElement) || states.has(video)) return;
 
+      // Do not download large video files during the initial page load.
+      // Calling play() only after the video enters view will start the required request.
+      video.preload = 'none';
+      video.setAttribute('preload', 'none');
+
       // Muted inline playback is the most compatible option for mobile autoplay.
       video.muted = true;
       video.setAttribute('muted', '');
