@@ -5,7 +5,8 @@
   "description": "Backend and web server for Malabi Exclusive Lodges.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "prestart": "node scripts/optimize-images.js"
   },
   "engines": {
     "node": ">=20"
@@ -14,6 +15,7 @@
     "express": "^5.1.0",
     "express-rate-limit": "^8.1.0",
     "helmet": "^8.1.0",
-    "resend": "^6.1.0"
+    "resend": "^6.1.0",
+    "sharp": "^0.34.5"
   }
 }
