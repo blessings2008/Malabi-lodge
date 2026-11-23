@@ -99,11 +99,11 @@ function emailHtml(data) {
     ['Check-in', data.checkin || 'Not specified'], ['Check-out', data.checkout || 'Not specified'], ['Guests', data.guests],
     ['Room preference', data.room], ['Message', data.message || 'No message']
   ];
-  return `<!doctype html><html><body style="font-family:Arial,sans-serif;line-height:1.6;color:#1d2a25"><h2>New Booking Enquiry — Malabi Exclusive Lodges</h2><table cellpadding="8" cellspacing="0" border="0">${rows.map(([label,value]) => `<tr><td style="font-weight:700;vertical-align:top">${escapeHtml(label)}</td><td>${escapeHtml(value)}</td></tr>`).join('')}</table><p style="color:#68756f;font-size:13px">Submitted through the Malabi website.</p></body></html>`;
+  return `<!doctype html><html><body style="font-family:Arial,sans-serif;line-height:1.6;color:#1d2a25"><h2>New Booking Enquiry — Malabi Exclusive Lodge</h2><table cellpadding="8" cellspacing="0" border="0">${rows.map(([label,value]) => `<tr><td style="font-weight:700;vertical-align:top">${escapeHtml(label)}</td><td>${escapeHtml(value)}</td></tr>`).join('')}</table><p style="color:#68756f;font-size:13px">Submitted through the Malabi website.</p></body></html>`;
 }
 
 function emailText(data) {
-  return ['NEW BOOKING ENQUIRY — MALABI EXCLUSIVE LODGES', '', `Guest: ${data.name}`, `Email: ${data.email || 'Not provided'}`, `Phone / WhatsApp: ${data.phone || 'Not provided'}`, `Check-in: ${data.checkin || 'Not specified'}`, `Check-out: ${data.checkout || 'Not specified'}`, `Guests: ${data.guests}`, `Room preference: ${data.room}`, `Message: ${data.message || 'No message'}`].join('\n');
+  return ['NEW BOOKING ENQUIRY — Malabi Exclusive Lodge', '', `Guest: ${data.name}`, `Email: ${data.email || 'Not provided'}`, `Phone / WhatsApp: ${data.phone || 'Not provided'}`, `Check-in: ${data.checkin || 'Not specified'}`, `Check-out: ${data.checkout || 'Not specified'}`, `Guests: ${data.guests}`, `Room preference: ${data.room}`, `Message: ${data.message || 'No message'}`].join('\n');
 }
 
 app.get('/robots.txt', (_req, res) => res.type('text/plain').sendFile(path.join(__dirname, 'robots.txt')));
