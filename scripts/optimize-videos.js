@@ -13,7 +13,8 @@ const videos = [
   ['PREMIUM.mp4', 'PREMIUM-optimized.mp4'],
   ['Img 8636(1).mp4', 'Img-8636-optimized.mp4'],
   ['Dulex Loom v2.mp4', 'Deluxe-optimized.mp4'],
-  ['IMG_8375.mp4', 'Pool-optimized.mp4']
+  ['IMG_8375.mp4', 'Pool-optimized.mp4'],
+  ['VID-20261123-WA0006.mp4', 'Executive-optimized.mp4']
 ];
 
 function runFfmpeg(input, output) {
