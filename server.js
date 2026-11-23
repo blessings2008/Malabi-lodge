@@ -8,7 +8,7 @@ const { Resend } = require('resend');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const NOTIFICATION_EMAIL = process.env.MALABI_NOTIFICATION_EMAIL || 'malabiexclusivelodges@gmail.com';
+const NOTIFICATION_EMAIL = process.env.MALABI_NOTIFICATION_EMAIL || 'MalabiExclusiveLodge@gmail.com';
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL;
 
 app.disable('x-powered-by');
