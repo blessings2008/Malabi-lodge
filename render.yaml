@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: malabi-exclusive-lodges
+    name: malabi-exclusive-lodge
     runtime: node
     plan: free
     buildCommand: npm install
@@ -11,4 +11,4 @@ services:
       - key: RESEND_FROM_EMAIL
         sync: false
       - key: MALABI_NOTIFICATION_EMAIL
-        value: malabiexclusivelodges@gmail.com
+        value: MalabiExclusiveLodge@gmail.com
