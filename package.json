@@ -1,8 +1,8 @@
 {
-  "name": "malabi-exclusive-lodges",
+  "name": "malabi-exclusive-lodge",
   "version": "1.0.0",
   "private": true,
-  "description": "Backend and web server for Malabi Exclusive Lodges.",
+  "description": "Backend and web server for Malabi Exclusive Lodge.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
