@@ -771,6 +771,61 @@ body.lightbox-open{overflow:hidden;}
     grid-row:span 2;
   }
 }
+
+/* Canonical room gallery mosaic — overrides legacy gallery and compact-section rules. */
+.room-section .room-gallery.featured,
+.room-section.compact .room-gallery.featured,
+.room-section .room-gallery.featured.deluxe-gallery {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  grid-template-rows: repeat(3, clamp(105px, 28vw, 180px)) !important;
+  grid-auto-flow: row !important;
+  gap: 10px !important;
+}
+.room-section .room-gallery.featured > a,
+.room-section.compact .room-gallery.featured > a,
+.room-section .room-gallery.featured.deluxe-gallery > a {
+  display: block !important;
+  grid-column: auto !important;
+  grid-row: auto !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: 100% !important;
+  overflow: hidden !important;
+  border-radius: 6px !important;
+}
+.room-section .room-gallery.featured > a:first-child,
+.room-section.compact .room-gallery.featured > a:first-child,
+.room-section .room-gallery.featured.deluxe-gallery > a:first-child {
+  grid-column: 1 !important;
+  grid-row: 1 / 4 !important;
+}
+.room-section .room-gallery.featured img,
+.room-section.compact .room-gallery.featured img,
+.room-section .room-gallery.featured.deluxe-gallery img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  aspect-ratio: auto !important;
+  object-fit: cover !important;
+}
+@media (min-width: 768px) {
+  .room-section .room-gallery.featured,
+  .room-section.compact .room-gallery.featured,
+  .room-section .room-gallery.featured.deluxe-gallery {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    grid-template-rows: repeat(2, clamp(145px, 17vw, 245px)) !important;
+    gap: 14px !important;
+  }
+  .room-section .room-gallery.featured > a:first-child,
+  .room-section.compact .room-gallery.featured > a:first-child,
+  .room-section .room-gallery.featured.deluxe-gallery > a:first-child {
+    grid-column: 1 / 3 !important;
+    grid-row: 1 / 3 !important;
+  }
+}
+
 </style>
 </head>
 <body>
