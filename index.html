@@ -258,6 +258,17 @@
   .room-section.compact .room-gallery{grid-template-columns:repeat(auto-fit, minmax(190px,1fr)); gap:10px;}
   @media(min-width:1100px){.room-section.compact .room-gallery{grid-template-columns:repeat(auto-fit, minmax(220px,1fr));}}
 
+  /* Match the Premium featured layout in every compact room gallery too.
+     The more-specific compact gallery rule otherwise overrides .room-gallery.featured. */
+  .room-section.compact .room-gallery.featured{grid-template-columns:repeat(auto-fit,minmax(240px,1fr));}
+  .room-section.compact .room-gallery.featured a:first-child{grid-column:span 2;}
+  .room-section.compact .room-gallery.featured a:first-child img{aspect-ratio:16/9;}
+  @media(min-width:1100px){
+    .room-section.compact .room-gallery.featured{grid-template-columns:repeat(4,minmax(0,1fr));}
+    .room-section.compact .room-gallery.featured a:first-child{grid-column:span 2;grid-row:span 2;}
+    .room-section.compact .room-gallery.featured a:first-child img{aspect-ratio:auto;height:100%;}
+  }
+
   .facilities{padding:90px 0; background:var(--green-deep); color:var(--ivory);}
   .fac-grid{display:grid; grid-template-columns:1fr; gap:2.5rem;}
   @media(min-width:960px){.fac-grid{grid-template-columns:0.7fr 1.3fr; gap:3.5rem; align-items:start;}}
